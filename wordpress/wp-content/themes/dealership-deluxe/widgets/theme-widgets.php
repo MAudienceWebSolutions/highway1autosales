@@ -9,8 +9,9 @@ function theme_widgets_init() {
 	  register_widget('Footer3_Widget');
 	  register_widget('Facebook_Widget');
 	  register_widget('GTCD_Widget'); 
-	  register_widget('Similar_Widget');
-	  register_widget('Carousel_Widget');   
+	  register_widget('Featured_Widget');
+	  register_widget('Carousel_Widget');
+	  register_widget('Phone_Header_Widget');	   
 	  }
 class Top_Deals extends WP_Widget{
 	function Top_Deals() {
@@ -26,66 +27,67 @@ class Top_Deals extends WP_Widget{
       <?php if ( !empty( $dealstitle ) ) { echo  $dealstitle; }?>
     </h3>
     <ul class="deal-rates">
-      <?php 
-      	wp_reset_query();
-  		$query = new WP_Query(array(
-			'post_type' => array('gtcd','user_listing'),
-			'meta_key' => '_topdeal',
-			'meta_value' => 'Yes',
-			'posts_per_page' => $numdeals,
-		));
+      <?php  wp_reset_query();	$query = new WP_Query(array(
+							'post_type' => array('gtcd','user_listing'),
+							'meta_key' => '_topdeal',
+							'meta_value' => 'Yes',
+							'posts_per_page' => $numdeals,
+							));
+							if ( $query->have_posts() ) while ( $query->have_posts() ) : $query->the_post();global $post,$field, $fields, $fields2, $fields3; $fields = get_post_meta($post->ID, 'mod1', true); $fields3 = get_post_meta($post->ID, 'mod3', true); $fields2 = get_post_meta($post->ID, 'mod2', true);  $symbols = get_option('gorilla_symbols'); $options = my_get_theme_options();?>
+      <li class="new-arrivals-list"> <a class="arrivals-link" href="<?php the_permalink();?>">
+        <div class="image-container">
+          <?php if ( 'user_listing' == get_post_type($post->ID) ) {
+										$args = array(
+										'order'          => 'ASC',
+										'orderby'        => 'menu_order',
+										'post_type'      => 'attachment',
+										'post_parent'    => $post->ID,
+										'post_mime_type' => 'image',
+										'post_status'    => null,
+										'numberposts'    => 1,
+										);
+										$attachments = get_posts($args);										
+										if ($attachments) {
+											foreach ($attachments as $attachment) {
+												arrivals_img ($post->ID,'medium');
+												}
+											} 
+										} elseif ( 'gtcd' == get_post_type($post->ID) ) {
+												gorilla_img ($post->ID,'medium');
+										}?> 
 
-		if ( $query->have_posts() ) while ( $query->have_posts() ) : $query->the_post();
-		global $post,$field, $fields, $fields2, $fields3; 
-		$fields = get_post_meta($post->ID, 'mod1', true); 
-		$fields3 = get_post_meta($post->ID, 'mod3', true); 
-		$fields2 = get_post_meta($post->ID, 'mod2', true);  
-		$symbols = get_option('gorilla_symbols'); 
-		$options = get_option('gorilla_fields');
-
-		include(TEMPLATEPATH."/functions/var/default-box-one.php");
-		include(TEMPLATEPATH."/functions/var/default-box-two.php");
-		include(TEMPLATEPATH."/functions/var/default-box-three.php");	
-	?>
-
-    <li class="new-arrivals-list">
-    	<a class="arrivals-link" href="<?php the_permalink();?>">
-	        <div class="image-container">
-	          <?php gorilla_img($post->ID,'thumbnail');?>
-	        </div>
-
-        	<div class="arrivals-details">   
-       			<p class="vehicle-name"><?php echo $post->post_title ?></p>
+        </div>
+        
+        
+        
+        <div class="arrivals-details">   
+        	<p class="vehicle-name"><?php the_title(); ?></p>
 				<p class="vehicle-info">
-					<span class="show-for-small">
-						<?php 
-							if ( $fields['year']){ 
-								echo $fields['year'];}
-							else {  
-								echo ''; 
-							}
+				<span class="price"><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']).'</span>'; } else  { echo '<span class="price">'.$fields['price'].'</span>' ; } ?><br/>
+<div class="meta-style"><?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> <?php	 if ( $fields['miles']){ echo $fields['miles'].' '.$options['miles_text'];} elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['miles_text'];} else {echo '';}  ?></div></span></p>   
 
-						?> 
-					| </span>
-					<span class="price">
-						<?php 
-							if (is_numeric( $fields['price'])){ 
-								echo $symbols['currency'].number_format($fields['price']).'</span>';
-							} else  {
-								echo '<span class="price">'.$fields['price'].'</span>' ; 
-							} 
-						?>
-						<br/>
+<?php $terms = get_the_terms( $post->ID , 'location' );
 
-					<?php 
-						if ( is_numeric($fields['miles'])){
-							echo number_format($fields['miles'],0,'.',',').' '.$options['milestext']; 
-						} else  {
-							echo $fields['miles'];
-						};
-					?>
-				</strong></p>      
+
+$output = array();
+foreach((array) $terms as $term){
+  $output[] = $term->name;
+}
+
+if ( empty( $terms ) ) {
+	
+  echo  '<p><span class="location_arrivals"></span></p>';
+
+		} else {
+
+echo  '<p><span class="location_arrivals">'.implode(', ', $output).'</span></p>'; }  ?> 
+   
                </div>    
+               
+               
+               
+               
+               
           </a> 
         <div class="clear"></div>
         </li>
@@ -197,11 +199,11 @@ class GTCD_Widget extends WP_Widget {
 			$title = $instance[ 'title' ];
 		}
 		else {
-			$title = __( 'Title', 'text_domain' );
+			$title = __( 'Title', 'language' );
 		}
 		?>
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
+		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:','language' ); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 		</p>
 		<?php 
@@ -235,7 +237,9 @@ class Carousel_Widget extends WP_Widget {
 			$numbers = isset( $instance['numbers'] ) ? apply_filters( 'widget_numbers', $instance['numbers'] ) : '';
 		if ( ! empty( $numbers ) )
 			
-		?><div class="mobile-slider hide">
+		?>
+		<?php $options = my_get_theme_options();$the_tax = get_taxonomy( get_query_var( 'location' ) );?>
+		<div class="mobile-slider hide">
 <h2><?php _e('Featured','language');?></h2>
      <?php
     $query = new WP_Query(array(
@@ -300,12 +304,45 @@ $args = array('order'          => 'ASC','orderby'=> 'menu_order','post_type'=> '
                'order' => 'DESC' ,
                'posts_per_page' => $numbers,
                ));
+               
                   if ( $query->have_posts() ) : while ( $query->have_posts() ) : $query->the_post();
                ?>                   
-               <?php global $post,$field, $fields, $fields2, $fields3; $fields = get_post_meta($post->ID, 'mod1', true); $fields3 = get_post_meta($post->ID, 'mod3', true); $fields2 = get_post_meta($post->ID, 'mod2', true);  $symbols = get_option('gorilla_symbols'); $options = get_option('gorilla_fields');include(TEMPLATEPATH."/functions/var/default-box-one.php");include(TEMPLATEPATH."/functions/var/default-box-two.php");include(TEMPLATEPATH."/functions/var/default-box-three.php");?>                   
+               <?php global $post,$field, $fields, $fields2, $fields3; $fields = get_post_meta($post->ID, 'mod1', true); $fields3 = get_post_meta($post->ID, 'mod3', true); $fields2 = get_post_meta($post->ID, 'mod2', true);  $symbols = get_option('gorilla_symbols'); 	$options = my_get_theme_options();?>                   
                   <a href="<?php the_permalink(); ?>">
                   <h2><?php if (isset( $fields['year'])){ echo $fields['year'].' ';} else {  echo ''; } ?>   
-                       <?php if ($post->post_type == "gtcd") { the_title();if (isset( $fields['price'])){ echo ' | <span class="price_slider">'.'  '.$symbols['currency']; echo number_format($fields['price']).'</span> ';}else {  echo ''; }
+                       <?php if ($post->post_type == "gtcd") { the_title();if (isset( $fields['price'])){ echo ' | <span class="price_slider">'.'  '.$symbols['currency']; echo number_format($fields['price']).'</span> ';
+	                       
+	                       
+	                       
+	                       
+	                       
+	                       $terms = get_the_terms( $post->ID , 'location' );
+
+
+$output = array();
+foreach((array) $terms as $term){
+  $output[] = $term->name;
+}
+
+if ( empty( $terms ) ) {
+
+		} else {
+
+echo '| '. implode(', ', $output); }   
+       
+    
+ 
+
+
+ 
+
+	                       
+	                       
+	                       
+	                       
+	                       
+	                       
+                       }else {  echo ''; }
 }else { the_title();}?></h2>
                   <div class="title-detail-tag"></div>
                                          <?php if ( has_post_thumbnail() ) { $thumb = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'large' ); $url = $thumb['0'];echo '<img src="'.$url.'" />';} elseif ( 'user_listing' == get_post_type($post->ID) ){						
@@ -332,11 +369,11 @@ gorilla_img ($post->ID,'large');
 			$numbers = $instance[ 'numbers' ];
 		}
 		else {
-			$number = __( 'Title', 'text_domain' );
+			$number = __( 'Title', 'language' );
 		}
 		?>
 		<p>
-		<label for="<?php echo $this->get_field_id( 'numbers' ); ?>"><?php _e( 'Number of Listings:' ); ?></label> 
+		<label for="<?php echo $this->get_field_id( 'numbers' ); ?>"><?php _e( 'Number of Listings:','language' ); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id( 'numbers' ); ?>" name="<?php echo $this->get_field_name( 'numbers' ); ?>" type="text" value="<?php echo esc_attr( $numbers ); ?>">
 		</p>
 		<?php 
@@ -349,12 +386,12 @@ gorilla_img ($post->ID,'large');
 	}
 
 } 
-class Similar_Widget extends WP_Widget {
+class Featured_Widget extends WP_Widget {
 	function __construct() {
 		parent::__construct(
 			'simil_widget', 
-			__('Dealership Similar Cars', 'language'), 
-			array( 'description' => __( 'Dealership Similar Cars by tag', 'language' ), ) 
+			__('Dealership: Featured Vehicles Module', 'language'), 
+			array( 'description' => __( 'Featured Vehicles Module in Single Listing Page', 'language' ), ) 
 		);
 	}
 	         public function widget( $args, $instance ) {
@@ -364,26 +401,39 @@ class Similar_Widget extends WP_Widget {
 		  ?><div id="product-list-wrapper-similar" class="hide-for-small">
 	<?php  echo $args['before_title'] .'<h2>'.$title .'</h2>'. $args['after_title'];?>
 		<ul class="tricol-product-list-similar detail-page-product-list">
-		<?php 
+				<?php 
+
 				global $post;  wp_reset_query();
-				$terms = get_the_terms( $post->ID , 'features');
-				$do_not_duplicate[] = $post->ID;
- 				if(!empty($terms)){
-    			foreach ($terms as $term) {
-        		query_posts( array(
-        		'features' => $term->slug,
-        		'post__not_in' => $do_not_duplicate ) );
-        		if(have_posts()){ while ( have_posts() ) : the_post(); $do_not_duplicate[] = $post->ID; ?>
-        		<?php if($count<$number): ?>
-        		<?php require_once(TEMPLATEPATH."/functions/var/default-box-one.php");
-			  require_once(TEMPLATEPATH."/functions/var/default-box-two.php");
-			  require_once(TEMPLATEPATH."/functions/var/default-box-three.php");
-			  global $options;$fields;$options2;$options3;$symbols;
+
+    
+				$query = new WP_Query(array(
+               'post_type' => array('gtcd','user_listing'),
+               'meta_key' => '_featured',
+               'meta_value' => 'Yes',
+               'orderby' => 'ASC',
+               'posts_per_page' => $number
+               ));
+ 
+
+        		if( $query->have_posts()){ while ($query->have_posts() ) :  $query->the_post(); ?>
+        		
+        		        
+        				<?php 
+
+			  global $options, $fields, $options2, $options3, $symbols;
+
 			  $fields = get_post_meta($post->ID, 'mod1', true);
+
 			  $options2 = get_post_meta($post->ID, 'mod2', true);
+
 			  $options3 = get_post_meta($post->ID, 'mod3', true);
+
 			  $symbols = get_option('gorilla_symbols');
-			  $options = get_option('gorilla_fields');
+
+			  $options = my_get_theme_options();
+
+
+
 			  ?>
 				<li>
 				<div class="image-container">
@@ -419,19 +469,18 @@ class Similar_Widget extends WP_Widget {
 				 <div>
 					<strong><?php the_title();?></strong>
 					<div class="meta-style"><?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> <?php	 if ( $fields['miles']){ echo $fields['miles'].' '.$options['milestext'];} elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['milestext'];} else {echo '';}  ?></div>
-					<div class="vehicle-bbprice price-style"><span class='strike'><?php  if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency']; echo number_format($fields['blackbookprice']);} else {  echo $fields['blackbookprice']; } ?></span></div>
-<div class="price-style"><?php  if ( $fields['price']){ echo $symbols['currency']; echo number_format($fields['price']);}else {  echo ''; } ?></div>
+					<div class="price-style"><?php  if ( $fields['price']){ echo $symbols['currency']; echo number_format($fields['price']);}else {  echo ''; } ?></div>
 						<p><a class="detail-btn" href="<?php the_permalink();?>"><?php _e('View','language');?></a></p>
                      </div>   
 				</li>
 				
-				<?php $count++; endif; ?>
+				
 
 			<?php endwhile; wp_reset_query();
 
         	}
-    	}
-} 	?>
+    	
+	?>
 		</ul>
 	</div><!--end of content div--><?php		
 		echo $args['after_widget'];
@@ -441,21 +490,21 @@ class Similar_Widget extends WP_Widget {
 			$title = $instance[ 'title' ];
 		}
 		else {
-			$title = __( 'Title', 'text_domain' );
+			$title = __( 'Title', 'language' );
 		}
 		if ( isset( $instance[ 'number' ] ) ) {
 			$number = $instance[ 'number' ];
 		}
 		else {
-			$number = __( 'Number of vehicles', 'text_domain' );
+			$number = __( 'Number of vehicles', 'language' );
 		}
 		?>
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
+		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:','language' ); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 		</p>
 		<p>
-		<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of Vehicles:' ); ?></label> 
+		<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of Vehicles:','language' ); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo esc_attr( $number ); ?>">
 		</p>
 
@@ -688,4 +737,34 @@ class Footer3_Widget extends WP_Widget {
   </label>
 </p>
 <?php }
+}
+class Phone_Header_Widget extends WP_Widget {
+	function Phone_Header_Widget() {
+		$widget_ops = array( 'description' => (__('Add phone number to theme header','language')));
+		$this->WP_Widget('contact_button_header', 'Dealership: Header Phone Number', $widget_ops);
+	}
+	function widget($args, $instance) {
+		extract($args, EXTR_SKIP);
+			$title = empty($instance['title']) ? ' ' : apply_filters('widget_title', $instance['title']);
+			$link = empty($instance['link']) ? ' ' : apply_filters('widget_link', $instance['link']);
+		
+?>
+	<div class="call-us font"><?php echo $title;?></a><i class="fa fa-phone-square fa-3x phone"></i></div>
+<?php
+	}
+	function update($new_instance, $old_instance) {
+		$instance = $old_instance;
+		$instance['title'] = strip_tags($new_instance['title']);
+		$instance['link'] = strip_tags($new_instance['link']);
+		return $instance;
+	}
+	function form($instance) {
+		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'link' => '' ) );
+		$title = strip_tags($instance['title']);
+		$link = strip_tags($instance['link']);
+?>
+	<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e("Phone Number: ","language");?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></label></p>
+			<p><label for="<?php echo $this->get_field_id('link'); ?>"><?php _e("Contact Page URL link: ","language");?> <input class="widefat" id="<?php echo $this->get_field_id('link'); ?>" name="<?php echo $this->get_field_name('link'); ?>" type="text" value="<?php echo esc_attr($link); ?>" /></label></p>			
+<?php
+	}
 }

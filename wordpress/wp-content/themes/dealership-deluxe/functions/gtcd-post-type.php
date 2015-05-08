@@ -81,12 +81,8 @@ function gtcd_custom_columns($column)
 				$fields2 = get_post_meta($post->ID, 'mod3', true); 
 				$field = get_option('gorilla_fields');
 				$symbols = get_option('gorilla_symbols');
-				if(isset($fields['price'])){
-					if(empty($fields['price']))
-					{
-						$fields['price'];
-						}
-						}				
+				 $options = my_get_theme_options();
+							
 				if(empty($symbols['currency'])) 
 				{ 
 					$symbols['currency'] = '$'; 
@@ -98,18 +94,18 @@ function gtcd_custom_columns($column)
 				}
 				echo '<div style="color:#132b3a;margin:10px 0!important;font-weight:bold;font-size:18px;">'.get_the_title().'</div>';
 
-				if(!empty($fields['price']))
+				if (is_numeric( $fields['price']) && isset( $fields['price']) )
 				{  
 				 
-					echo '<div style="font-weight:bold;font-size:16px;color:#c41111!important;margin:5px 0!important;">'.$symbols['currency'].number_format($fields['price']). '</div>';   
-				} 			
+				echo '<div style="font-weight:bold;font-size:16px;color:#c41111!important;margin:5px 0!important;">'.$options['price_text'].': '.$symbols['currency']; echo number_format($fields['price']).'</div>'; } else {  echo $fields['price'].'</div>'; }		
+					
 				if(empty($fields['milestext']))
 				{
 					$fields['milestext'] = __('Miles','language');
 				}	
 				if(!empty($fields['miles']))
 				{  
-					echo '<div style="color:#454d51;margin-bottom:3px;font-size:12px"><strong>'.$field['milestext'].'</strong>: '.$fields['miles'].'</div>';   
+					echo '<div style="color:#454d51;margin-bottom:3px;font-size:12px"><strong>'.$options['miles_text'].'</strong>: '.$fields['miles'].'</div>';   
 				} 
 				else 
 				{

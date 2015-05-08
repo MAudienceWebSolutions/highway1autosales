@@ -4,11 +4,6 @@ Template Name: Financing
 */
 ?>
 <?php get_header(); ?>	
-<div class="top-single-bar hide">
-            <div class="backToInventory show-for-small"><a href="javascript: history.go(-1)">< Back</a></div>
-            <div class="show-for-small refine-search-single"><a id="searchBoxPop2" href="#"></a></div>
-            <div class="clear"></div>
-            </div>
             <div id="sidebar-search" > 
 		<?php if ( ! dynamic_sidebar( 'Search Module' )) : ?>
 				<?php endif; ?>
@@ -18,7 +13,7 @@ Template Name: Financing
 			<div class="cpsAjaxLoaderCenter"></div> 
 				<div class="detail-page-content hideOnSearch">
 					<?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
-					<div class="page-post">                 	 
+					<div class="blog-post">                 	 
 					<h1 class="common"><?php the_title();?></h1>	
 					<div class="thumb_articles"><a href="<?php the_permalink();?>"><?php  gorilla_img($post->ID,'featured'); ?></a></div>
 						<?php the_content();?>

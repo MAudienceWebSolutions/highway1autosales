@@ -6,7 +6,7 @@
 					'post_type' => array('gtcd','user_listing'),
 					'posts_per_page' => '12'
 					));
-						if ( $query->have_posts() ) : while ( $query->have_posts() ) : $query->the_post(); global $post,$field, $fields, $fields2, $fields3; $fields = get_post_meta($post->ID, 'mod1', true); $fields3 = get_post_meta($post->ID, 'mod3', true); $fields2 = get_post_meta($post->ID, 'mod2', true);  $symbols = get_option('gorilla_symbols'); $options = get_option('gorilla_fields');include(TEMPLATEPATH."/functions/var/default-box-one.php");include(TEMPLATEPATH."/functions/var/default-box-two.php");include(TEMPLATEPATH."/functions/var/default-box-three.php");?>					  	
+						if ( $query->have_posts() ) : while ( $query->have_posts() ) : $query->the_post(); global $post,$field, $fields, $fields2, $fields3; $fields = get_post_meta($post->ID, 'mod1', true); $fields3 = get_post_meta($post->ID, 'mod3', true); $fields2 = get_post_meta($post->ID, 'mod2', true);  $symbols = get_option('gorilla_symbols'); $options = my_get_theme_options();?>					  	
 				<li class="new-arrivals-list"><a class="arrivals-link" href="<?php the_permalink();?>"><div class="cpsAjaxLoaderHome">  </div> 
 					<div class="image-container">				 
 							<div class="<?php echo $fields['statustag'];?>"></div>					
@@ -32,12 +32,33 @@
 						 
 					</div></a>
                     <div class="arrivals-details">
-					<strong><?php the_title();?></strong>
-					<div class="meta-style"><?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> <?php	 if ( $fields['miles']){ echo $fields['miles'].' '.$options['milestext'];} elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['milestext'];} else {echo '';}  ?></div>
-					<div class="price-style">
-					<span class='strike'><?php  if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency']; echo number_format($fields['blackbookprice']);} else {  echo $fields['blackbookprice']; } ?></span><?php  if (is_numeric( $fields['price'])){ echo ' '.$symbols['currency']; echo number_format($fields['price']);} else {  echo ' '.$fields['price']; } ?></div>
+					<p><strong><?php the_title();?></strong></p>
+						<div class="price-style">
+					
+					
+					
+					
+					
+					<?php  if (is_numeric( $fields['price'])){ echo $symbols['currency']; echo number_format($fields['price']);} else {  echo $fields['price']; } ?></div>
 						
 					
+					<div class="meta-style"><?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> <?php	 if ( $fields['miles']){ echo $fields['miles'].' '.$options['miles_text'];} elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['miles_text'];} else {echo '';}  ?></div>
+				
+					<?php $terms = get_the_terms( $post->ID , 'location' );
+
+
+$output = array();
+foreach((array) $terms as $term){
+  $output[] = $term->name;
+}
+
+if ( empty( $terms ) ) {
+	
+  echo  '<p><span class="location_arrivals"></span></p>';
+
+		} else {
+
+echo  '<p><span class="location_arrivals">'.implode(', ', $output).'</span></p>'; }  ?> 
 					
 						<p><a class="detail-btn" href="<?php the_permalink();?>"><?php _e('View','language');?></a></p>
                      </div>   

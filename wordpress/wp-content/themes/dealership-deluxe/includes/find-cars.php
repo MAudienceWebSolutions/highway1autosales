@@ -1,6 +1,6 @@
 <?php $query = new WP_Query(array('post_type' => array('gtcd'),'posts_per_page' => '1' )); if ( $query->have_posts() ) while ( $query->have_posts() ) : $query->the_post(); ?>
 
-<?php global $output,$findmake,$post,$field, $fields, $fields2, $fields3; $fields = get_post_meta($post->ID, 'mod1', true); $fields3 = get_post_meta($post->ID, 'mod3', true); $fields2 = get_post_meta($post->ID, 'mod2', true);  $symbols = get_option('gorilla_symbols'); $options = get_option('gorilla_fields');include(TEMPLATEPATH."/functions/var/default-box-one.php");include(TEMPLATEPATH."/functions/var/default-box-two.php");include(TEMPLATEPATH."/functions/var/default-box-three.php");?>
+<?php global $output,$findmake,$post,$field, $fields, $fields2, $fields3; $fields = get_post_meta($post->ID, 'mod1', true); $fields3 = get_post_meta($post->ID, 'mod3', true); $fields2 = get_post_meta($post->ID, 'mod2', true);  $symbols = get_option('gorilla_symbols'); $options = get_option('gorilla_fields');?>
 	<div  class="full-width find-wrapper">
 		<ul class="find-nav">
 			<li><a class="active one" href="#" style="width:auto;"><?php _e('Find cars by Vehicle Type','language')?></a></li>

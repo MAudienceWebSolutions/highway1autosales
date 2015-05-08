@@ -139,6 +139,7 @@ if(isset($_POST['submit'])) {
         <div class="clear"></div>
       </div>
       </p>
+      <div style="clear:both"></div>
       <p>
         <input type="submit" id="submitsearch" name="submit" class="seller-send-btn" value="Send" />
       </p>

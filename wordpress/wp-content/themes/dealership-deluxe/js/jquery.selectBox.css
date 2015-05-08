@@ -1,3 +1,5 @@
+/* @override http://dealership.dev/wp-content/themes/dealership-deluxe/js/jquery.selectBox.css */
+
 /* Dropdown control */
 .selectBox-dropdown {
 	width: 160px!important; /* width = (desired width) - padding-right */
@@ -11,8 +13,8 @@
 	background: #fafafa;
 	display: inline-block;
 	cursor: default;
-	font: 12px 'PlayRegular',Arial, Helvetica, "Trebuchet MS", sans-serif;
-	 text-transform: uppercase;
+	font: 13px 'Lato' sans-serif;
+	
 }
 
 .selectBox-dropdown:focus,

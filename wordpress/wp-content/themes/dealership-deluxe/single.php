@@ -1,9 +1,4 @@
 <?php get_header(); ?>
-<div class="top-single-bar hide">
-            <div class="backToInventory show-for-small"><a href="javascript: history.go(-1)">< Back</a></div>
-            <div class="show-for-small refine-search-single"><a id="searchBoxPop2" href="#"></a></div>
-            <div class="clear"></div>
-            </div>
             <div id="sidebar-search" > 
 		<?php if ( ! dynamic_sidebar( 'Search Module' )) : ?>
 				<?php endif; ?>
@@ -27,8 +22,6 @@
 			</div>			
 		</div>
 		<div id="sidebar" class="common">				
-			<?php if ( ! dynamic_sidebar( 'Search Module' )) : ?>			
-			<?php endif; ?>
             <?php if ( ! dynamic_sidebar( 'Sidebar' )) : ?>
 			<?php endif; ?>
 		</div>

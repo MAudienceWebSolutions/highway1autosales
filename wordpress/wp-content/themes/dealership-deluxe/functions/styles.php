@@ -5,7 +5,7 @@ function theme_options_init(){
 	register_setting( 'dealership_options', 'dealership_theme_options', 'theme_options_validate' );
 }
 function theme_options_add_page() {
-	add_theme_page( __( 'Theme Style', 'language' ), __( 'Theme Color', 'language' ), 'edit_theme_options', 'theme_options', 'theme_options_do_page' );
+	add_theme_page( __( 'Theme Style', 'language' ), __( 'Theme Color', 'language' ), 'edit_theme_options', 'styles_page', 'theme_options_do_page' );
 }
 function theme_options_do_page() {
 	global $select_options, $radio_options;

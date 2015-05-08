@@ -19,16 +19,21 @@ function cps_template_redirect_file()
 	add_filter('query_vars', 'cps_add_query_vars');
 	add_action('template_redirect', 'cps_template_redirect_file');
 	$use_ajax = get_option('cps_use_ajax');
-	$option = get_option('gorilla_fields');
-	$array_taxonomy = array( 'makemodel', 'features');		
-		if(($option['makemodelhide']) == 'Yes')
+	$options = my_get_theme_options();
+	$array_taxonomy = array( 'makemodel', 'features','location');	
+		if(($options['makemodelhide']) == 'on')
 		{	  
 		  $array_taxonomy = array_diff($array_taxonomy, array('makemodel'));
-		}		
-if(($option['featureshide']) == 'Yes')
+		}
+		if(($options['state_hide']) == 'on')
+		{	  
+		  $array_taxonomy = array_diff($array_taxonomy, array('location'));
+		}	
+if(($options['featureshide']) == 'on')
 		{	  
 		  $array_taxonomy = array_diff($array_taxonomy, array('features'));	
 		}
+
 		$CPS_OPTIONS = array(
 			'meta_boxes_vars' => array($meta_boxes,$feat_boxes,$comment_boxes),
 			'taxonomies' =>  $array_taxonomy,
@@ -110,7 +115,7 @@ function cps_load_scripts_and_styles(){
 function cps_display_meta_box_search_form($meta_boxes){	
 		global $CPS_OPTIONS;
 		foreach($meta_boxes as $metaBox){	
-			if(isset($metaBox['hide_in_search']) && $metaBox['hide_in_search'] === "Yes"){
+			if(isset($metaBox['hide_in_search']) && $metaBox['hide_in_search'] === "on"){
 				continue;
 			}	
 			switch($metaBox['type']){	
@@ -147,7 +152,6 @@ function numberWithCommas(x) {
 	<div class="drop"><select name="price" class="dropdown">
 	<option value=""><?php _e('Price','language');?></option>
     <?php
-     include(TEMPLATEPATH."/functions/var/default-box-one.php");
      $symbols = get_option('gorilla_symbols');
 	 $step = $CPS_OPTIONS['range'];
 	 $start = $Range->min - $step;
@@ -190,7 +194,6 @@ function numberWithCommas(x) {
 	}
 function cps_ajax_search($meta_boxes){
 	$posts = cps_search_posts();?>
-<?php require_once(TEMPLATEPATH."/functions/var/default-box-one.php"); ?>
 	<div style="clear:both"></div>	
 		 <div class="top-single-bar mob">
   <div class="searchSort"> <!-- search sort starts -->
@@ -224,27 +227,56 @@ function cps_ajax_search($meta_boxes){
 					$displayed[] = $post->ID;
 			 	endif;
 			?>
-<?php global $options;$fields;$options2;$options3;$symbols;$fields = get_post_meta($post->ID, 'mod1', true);$options2 = get_post_meta($post->ID, 'mod2', true);$options3 = get_post_meta($post->ID, 'mod3', true);$symbols = get_option('gorilla_symbols');$options = get_option('gorilla_fields'); ?>
+<?php global $options;$fields;$options2;$options3;$symbols;
+	  $fields = get_post_meta($post->ID, 'mod1', true);
+	  $options2 = get_post_meta($post->ID, 'mod2', true);
+	  $options3 = get_post_meta($post->ID, 'mod3', true);
+	  $symbols = get_option('gorilla_symbols');
+	  $options = my_get_theme_options(); ?>			
+<?php $blogurl = get_bloginfo('template_url'); ?>
 <?php $surl = get_bloginfo('url'); ?>			 
 <div class="result-car"> <!-- result car -->
 <a class="result-car-link"   href="<?php echo get_permalink($post->ID) ?>" rel="bookmark" title="<?php echo $post->post_title ?>">
 <div class="vehicle-main-image"><?php gorilla_img ($post->ID,'medium'); ?><span class="<?php echo $fields['statustag'];?>"></span></div>
 <div class="result-detail-wrapper">  <!-- result detail wrapper -->
 <p class="vehicle-name"><span class="mini-hide"><?php if ( $fields['year']){ echo $fields['year'];}else {  echo ''; }?></span> <?php echo $post->post_title ?></p>
-
 <p class="vehicle-price show-for-small"><?php if ( $fields['year']){ echo $fields['year'];}else {  echo ''; }?> | <span class="price"><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']).'</span>'; } else  { echo '<span class="price">'.$fields['price'].'</span>' ; } ?>&nbsp;|&nbsp;
-<?php if ( is_numeric($fields['miles'])){echo number_format($fields['miles'],0,'.',',').' '.$options['milestext']; }else  {echo $fields['miles']; };?></strong></p>
+<?php if ( is_numeric($fields['miles'])){echo number_format($fields['miles'],0,'.',',').' '.$options['miles_text']; }else  {echo $fields['miles']; };?></strong></p>
+
+<?php  echo '<p class="strong">';?>
+							
+							
+							
+							<?php $terms = get_the_terms( $post->ID , 'location' );
+
+
+$output = array();
+foreach((array) $terms as $term){
+  $output[] = $term->name;
+}
+
+if ( empty( $terms ) ) {
+
+		} else {
+
+echo implode(', ', $output).'</p>'; }   
+       
+    
+ 
+
+
+ ?>
+
                             <!-- EOF  Responsive -->
                    <p class="vehicle-miles show-for-medium-up hide-for-small">
-              <?php if ( is_numeric($fields['miles'])){echo number_format($fields['miles'],0,'.',',').' '.$options['milestext']; }else  {echo $fields['miles']; };?></p>
-	                        <p class="vehicle-secondary-info"><?php if (isset( $fields['vehicletype'])){ echo $fields['vehicletype'].' | ';}else {  echo ''; };?> <?php if (isset( $fields['transmission'])){ echo $fields['transmission'];}else {  echo ''; };?><br/>
-                     <?php if (isset( $options2['cylinders'])){ echo $options2['cylinders'].' '.$options['cylinderstext'].' | ';}else {  echo ''; };?>
-              <?php if (isset( $fields['interior'])){ echo '<span class="mini-hide">'.$fields['interior'].' | </span>';}else {  echo ''; };?>
-              <?php if (isset( $fields['exterior'])){ echo '<span class="mini-hide">'.$fields['exterior'].' | </span>';}else {  echo ''; };?>
+              <?php if ( is_numeric($fields['miles'])){echo number_format($fields['miles'],0,'.',',').' '.$options['miles_text']; }else  {echo $fields['miles']; };?></p>
+	                        <p class="vehicle-secondary-info"><?php if (isset( $fields['vehicletype'])){ echo $fields['vehicletype'].' | ';}else {  echo ''; };?> <?php if (isset( $fields['transmission'])){ echo $fields['transmission'].' |';} else {  echo ''; };?>
+                    
+              <?php if (isset( $fields['interior'])){ echo '<span class="mini-hide">'.$options['exterior_text'].': '.$fields['exterior'].' / </span>';}else {  echo ''; };?>
+              <?php if (isset( $fields['exterior'])){ echo '<span class="mini-hide">'.$options['interior_text'].': '.$fields['interior'].'</span>';}else {  echo ''; };?>
               <?php if (isset( $fields['epamileage'])){ echo '<span class="mini-hide">'.$fields['epamileage'].'</span>';}else {  echo ''; };?>
                             </p>							
-	                        <p class="vehicle-bbprice"><span class='strike'><?php  if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency']; echo number_format($fields['blackbookprice']);} else {  echo $fields['blackbookprice']; } ?></span></p>
-<p class="result-price show-for-medium-up hide-for-small"><?php include(TEMPLATEPATH."/functions/var/default-box-one.php");
+	                        <p class="result-price show-for-medium-up hide-for-small"><?php
 						if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']); } else  { echo $fields['price']; } 
 							?>
 							</p>
@@ -468,10 +500,73 @@ function cps_get_range($custom_field_key){
 		return $result;
 	}
 function cps_display_taxonomy_search_form($taxonomy_names){	
+$options = my_get_theme_options();
+if (isset($options['state_hide']) && $options['state_hide'] == "off") {
 ?>
 <script type="text/javascript">
     $(function()
     {
+        $('#location').change(function()
+        {
+            var $mainCat=$('#location :selected').attr('data-value');
+            if(!$mainCat){
+                $mainCat = $('#location').val();
+            }
+            // .call ajax
+            $("#city").empty();
+            $.ajax
+            (
+            {
+                url:"<?php bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php", 
+                type:'POST',
+                data:'action=call_location&main_catid=' + $mainCat,
+                success:function(results)
+                {
+                    options = $(results);
+if(options.length > 1){
+$("#city").removeAttr("disabled"); 
+} else {
+if(!$("#city").is(':disabled')){
+$("#city").attr("disabled", "disabled"); 
+}
+}
+$("#city").append(results); 
+$("#city").selectBox('destroy');
+$("#city").selectBox();    
+                }
+            }
+        ); 
+        });
+    }); 
+</script>             
+<?php
+ wp_dropdown_categories(array(
+ 	'orderby' => 'name',
+ 	'order'=> 'ASC',
+                'show_count' => '0' ,
+                'selected' => '1' ,
+                'hierarchical' => '1' ,
+                'depth' => '1' ,
+                'hide_empty' => '1' ,
+                'exclude' => '1' ,
+                'class' => 'dropdown',
+                'show_option_none' => __('Select State','language'),
+                'option_none_value' => '',
+                'name' => 'location' ,
+                'taxonomy' => 'location' ,
+                'walker' => new Walker_CategoryDropdown_Custom() ,
+            ));?>
+
+<select name="location" id="city"  class="dropdown" disabled="disabled"><option value=""><?php _e('Select City','language');?></option></select>
+<?php 
+} else { echo '';}
+?>
+<?php 
+if (isset($options['make_hide']) && $options['make_hide'] == "off") {
+?>
+<script type="text/javascript">
+    $(function()
+    {      
         $('#makemodel').change(function()
         {
             var $mainCat=$('#makemodel :selected').attr('data-value');
@@ -484,7 +579,7 @@ function cps_display_taxonomy_search_form($taxonomy_names){
             {
                 url:"<?php bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php", 
                 type:'POST',
-                data:'action=my_special_ajax_name_call&main_catid=' + $mainCat,
+                data:'action=name_call&main_catid=' + $mainCat,
                 success:function(results)
                 {
                     options = $(results);
@@ -497,7 +592,7 @@ $("#model").attr("disabled", "disabled");
 }
 $("#model").append(results); 
 $("#model").selectBox('destroy');
-$("#model").selectBox();    
+$("#model").selectBox();                     
                 }
             }
         ); 
@@ -505,7 +600,8 @@ $("#model").selectBox();
     }); 
 </script>             
 <?php
- wp_dropdown_categories_custom(array(
+ wp_dropdown_categories(array(
+
  				'orderby' => 'name',
  				'order'=> 'ASC',
                 'show_count' => '1' ,
@@ -515,28 +611,42 @@ $("#model").selectBox();
                 'hide_empty' => '0' ,
                 'exclude' => '1' ,
                 'class' => 'dropdown',
-                'show_option_none' =>  'Select Make',
+                'show_option_none' =>  __('Select Make','language'),
+                'option_none_value' =>  '',
                 'name' => 'makemodel' ,
                 'taxonomy' => 'makemodel' ,
                 'walker' => new Walker_CategoryDropdown_Custom() ,
             ));?>
-<select name="makemodel" id="model"  class="dropdown" disabled="disabled"><option value=""><?php _e( 'Model', 'language' );?></option></select>
-<?php
-		}	
+<select name="makemodel" id="model"  class="dropdown" disabled="disabled"><option value=""><?php _e('Select Model','language');?></option></select>
+<?php 
+} else { echo '';}
+?>
+<?php }	
+
 function generate_dropdown_options($hTerm)
+
 		{
 			if(is_array($hTerm))
+
 			{
 				foreach($hTerm as $tChild)
 				{
 					echo '<option value="'.trim($tChild->name).'">'.$tChild->title.'</option>';
+					//echo generate_dropdown_options($tChild);
 				}
+
 			} 
+
 			else 
+
 			{
+
 				echo '<option value="'.trim($hTerm->name).'">&raquo;'.$hTerm->title.'</option>';
+
 			}
+
 		}
+
 	$RES_COUNT = 0;	
 function cps_search_posts(){
 		global $CPS_OPTIONS;

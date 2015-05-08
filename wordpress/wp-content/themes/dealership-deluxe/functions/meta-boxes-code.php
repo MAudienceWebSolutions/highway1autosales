@@ -1,208 +1,204 @@
 <?php
 $mod1 = "mod1";
-$options = get_option('gorilla_fields');
-include(TEMPLATEPATH."/functions/var/default-box-one.php");
+$options = my_get_theme_options();
 include(TEMPLATEPATH."/includes/vloader.php");
-
 $meta_boxes = array(
-      "price" => array(
+"price" => array(
 	  "name" => "price", 
-  	  "title" => $options['pricetext'], 
-	  "description" => "Enter the full vehicle price without commas or dots.",
+  	  "title" => $options['price_text'], 
+	  "description" => __('Enter the full vehicle price without commas or dots.','language'),
 	  "type" => "range",
 	  "class" => "range",
 	  "rows" => "",
-          "width" => "",
-	  "hide_in_search" => $options['pricehide'],
+      "width" => "",
+	  "hide_in_search" => $options['price_hide'],
 	  "options" => ""
-		),
-      "blackbookprice" => array(
-	  "name" => "blackbookprice", 
-  	  "title" => 'Black Book Price',//$options['blackbookpricetext'],
-	  "description" => "Enter the full vehicle black book price without commas or dots.",
-	  "type" => "range",
-	  "class" => "range",
-	  "rows" => "",
-          "width" => "",
-	  "hide_in_search" => 'Yes',//$options['blackbookpricehide'],
-	  "options" => ""
-		), 	
-  	"statustag" => array(
+		), 
+ "statustag" => array(
 	  "name" => "statustag", 
-	  "title" => $options['statustagtext'], 
-	  "description" => "Enter vehicle condition.",
+	  "title" => $options['status_tag_text'], 
+	  "description" => __('Enter vehicle condition.','language'),
 	  "type" => "dropdown",
 	  "class" => "dropdown",
 	  "rows" => "",
 	  "width" => "",
-	  "hide_in_search" => $options['statustaghide'],
-	  "options" => array("1" => "None","2" => "New","3" => "Used","4" => "Sale","5" => "Reduced","6" => "Sold")
+	  "hide_in_search" => $options['condition_hide'],
+	  "options" => array("1" => __('None','language'),"2" => __('New','language'),"3" => __('Used','language'),"4" => __('Sale','language'),"5" => __('Reduced','language'),"6" => __('Sold','language'))
 
-	), 
-"featured" => array(
+	),"featured" => array(
 	  "name" => "featured",   
-	  "title" => $options['featuredtext'],
-	  "description" => "If yes this Vehicle will show up on the home page featured module.",
+	  "title" => $options['featured_text'],
+	  "description" => __('If yes this Vehicle will show up on the home page featured module.','language'),
 	  "type" => "dropdown",	
 	  "class" => 'dropdown',
-	  "hide_in_search" => 'Yes',
-	  "options" => array("1" => "Yes", "2" => "No",)
+	  "hide_in_search" => 'on',
+	  "options" => array("1" => __('Yes','language'), "2" => __('No','language'),)
 		), 
 "topdeal" => array(
 	  "name" => "topdeal",   
-	  "title" => $options['topdealtext'],
-	  "description" => "If yes this Vehicle will show up on the Top Deals Widget.",
+	  "title" => $options['top_deal_text'],
+	  "description" => __('If yes this Vehicle will show up on the Top Deals Widget.','language'),
 	  "type" => "dropdown",	
 	  "class" => 'dropdown',
-	  "hide_in_search" => 'Yes',
-	  "options" => array("1" => "No", "2" => "Yes",)
+	  "hide_in_search" => 'on',
+	  "options" => array("1" => __('Yes','language'), "2" => __('Yes','language'),)
 		), 
  "year" => array(
 	  "name" => "year",   
-	  "title" => $options['yeartext'], 
-	  "description" => "Enter vehicle year.",
+	  "title" => $options['year_text'], 
+	  "description" => __('Enter vehicle year.','language'),
 	  "type" => "dropdown",
 	  "class" => "dropdown",
 	  "rows" => "",
-	  "hide_in_search" => $options['yearhide'],
+	  "hide_in_search" => $options['year_hide'],
 	  "width" => "",
-	  "options" => generate_years( $options['yearstart'], $options['yearend'] ),
+	  "options" => generate_years( $options['year_start_text'], $options['year_end_text'] ),
 	  ),
- 
+"price" => array(
+	  "name" => "price", 
+  	  "title" => $options['price_text'], 
+	  "description" => __('Enter the full vehicle price without commas or dots.','language'),
+	  "type" => "range",
+	  "class" => "range",
+	  "rows" => "",
+      "width" => "",
+	  "hide_in_search" => $options['price_hide'],
+	  "options" => ""
+		), 	 
 "miles" => array(
 	  "name" => "miles",   
-	  "title" => $options['milestext'],  
-	  "description" => "Enter vehicle mileage.",
+	  "title" => $options['miles_text'],  
+	  "description" => __('Enter vehicle mileage.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
 	  "width" => "",
-	   "hide_in_search" => "Yes",
+	   "hide_in_search" => 'on',
 	  "options" => "miles"	  
 	),  
 "vehicletype" => array(
 	  "name" => "vehicletype",   
-	  "title" => $options['vehicletypetext'],  
-	  "description" => "Enter the Vehicle type.",
+	  "title" => $options['vehicle_type_text'],  
+	  "description" => __('Enter the Vehicle Type.','language'),
 	  "type" => "dropdown",
 	  "class" => "dropdown",
 	  "rows" => "",
 	  "width" => "",
-	   "hide_in_search" => $options['vehicletypehide'],
-	  "options" => array("1" => $options['vehicletype1'],  
-	  					 "2" => $options['vehicletype2'],
-	  					 "3" => $options['vehicletype3'],
-	  					 "4" => $options['vehicletype4'],
-	  					 "5" => $options['vehicletype5'],
-	  					 "6" => $options['vehicletype6'],
-	  					 "7" => $options['vehicletype7'],  
-	  					 "8" => $options['vehicletype8'],
-	  					 "9" => $options['vehicletype9'],
-	  					 "10" => $options['vehicletype10'],
-	  					 "11" => $options['vehicletype11'],
-	  					 "12" => $options['vehicletype12'],    
+	  "hide_in_search" => $options['vehicle_type_hide'],
+	  "options" => array("1" => $options['vehicle_type_1'],  
+	  					 "2" => $options['vehicle_type_2'],
+	  					 "3" => $options['vehicle_type_3'],
+	  					 "4" => $options['vehicle_type_4'],
+	  					 "5" => $options['vehicle_type_5'],
+	  					 "6" => $options['vehicle_type_6'],
+	  					 "7" => $options['vehicle_type_7'],  
+	  					 "8" => $options['vehicle_type_8'],
+	  					 "9" => $options['vehicle_type_9'],
+	  					 "10" => $options['vehicle_type_10'],
+	  					 "11" => $options['vehicle_type_11'],
+	  					 "12" => $options['vehicle_type_12'],    
 	  					 )
 	),  
 "stock" => array(
 	  "name" => "stock", 
-	  "title" => $options['stocktext'], 
-	  "description" => "Enter vehicle stock number.",
+	  "title" => $options['stock_text'], 
+	  "description" => __('Enter vehicle stock number.','language'),
 	  "type" => "text",
 	  "class" => "dropdown",
 	  "rows" => "",
 	  "width" => "",
-	  "hide_in_search" => 'Yes',
+	  "hide_in_search" => 'on',
 	  "options" => ""
 	), 
 "drive" => array(
 	  "name" => "drive", 
-	  "title" => $options['drivetext'],
-	  "description" => "Enter vehicle drive type.",
+	  "title" => $options['drive_text'],
+	  "description" => __('Enter vehicle drive type.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => 'Yes',
+	  "hide_in_search" => 'on',
 	  "width" => "",
 	  "options" => "drive"
 	),
 "transmission" => array(
 	  "name" => "transmission", 
-	  "title" => $options['transmissiontext'],
-	  "description" => "Enter vehicle transmission type.",
+	  "title" => $options['transmission_text'],
+	  "description" => __('Enter vehicle transmission type.','language'),
 	  "type" => "dropdown",
 	  "class" => "dropdown",
 	  "rows" => "",
-	  "hide_in_search" => 'Yes',
+	  "hide_in_search" => 'on',
 	  "width" => "",
-	  	  "options" => array("1" => $options['transmissionoption1'],  
-	  					 	 "2" => $options['transmissionoption2'],
-	  					 	 "3" => $options['transmissionoption3'],
-	  					 	 "4" => $options['transmissionoption4'],
+	  	  "options" => array("1" => $options['transmission_1'],  
+	  					 	 "2" => $options['transmission_2'],
+	  					 	 "3" => $options['transmission_3'],
+	  					 	 "4" => $options['transmission_4'],
 	 	  					 )
 	),
 "exterior" => array(
 	  "name" => "exterior", 
-	  "title" => $options['exteriortext'],
-	  "description" => "Enter vehicle exterior color.",
+	  "title" => $options['exterior_text'],
+	  "description" => __('Enter vehicle exterior color.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => 'Yes',
+	  "hide_in_search" => 'on',
 	  "width" => "",
 	  "options" => ""
 	), 
 "interior" => array(
 	  "name" => "interior", 
-	  "title" => $options['interiortext'],
-	  "description" => "Enter vehicle interior color.",
+	  "title" => $options['interior_text'],
+	  "description" =>  __('Enter vehicle interior color.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => 'Yes',
+	  "hide_in_search" => 'on',
 	  "width" => "",
 	  "options" => ""
 	),
 "EPA_CITY_MPG" => array(
 	  "name" => "EPA_CITY_MPG", 
-	  "title" => 'EPA City MPG',
-	  "description" => "Enter EPA City MPG.",
+	  "title" => __('EPA City MPG.','language'),
+	  "description" => __('Enter EPA City MPG.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => 'Yes',
+	  "hide_in_search" => 'on',
 	  "width" => "",
 	  "options" => ""
 	),
 "EPA_HIGHWAY_MPG" => array(
 	  "name" => "EPA_HIGHWAY_MPG", 
-	  "title" => 'EPA Highway MPG',
-	  "description" => "Enter EPA Highway MPG.",
+	  "title" => __('EPA Highway MPG.','language'),
+	  "description" => __('Enter EPA Highway MPG.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => 'Yes',
+	  "hide_in_search" => 'on',
 	  "width" => "",
 	  "options" => ""
 	),
 "vin" => array(
 	  "name" => "vin", 
-	  "title" => $options['vintext'],
-	  "description" => "Enter vehicle identification number.",
+	  "title" => $options['vin_text'],
+	  "description" => __('Enter vehicle identification number.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => 'Yes',
+	  "hide_in_search" => 'on',
 	  "width" => "",
 	  "options" => ""
 	),
 "carfax" => array(
 "name" => "carfax", 
-	  "title" => $options['carfaxtext'],
-	  "description" => "Enter Carfax partner ID to offer free reports with your vehicle.",
+	  "title" => $options['carfax_text'],
+	  "description" => __('Enter Carfax partner ID to offer free reports with your vehicle.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => 'Yes',
+	  "hide_in_search" => 'on',
 	  "width" => "",
 	  "options" => ""
 	),
@@ -211,285 +207,298 @@ $meta_boxes = array(
 ?>
 <?php	
  $mod2 = "mod2";
-$options = get_option('gorilla_fields');
-include(TEMPLATEPATH."/functions/var/default-box-two.php");
+$options = my_get_theme_options();
 $feat_boxes = array(
 "enginesize" => array(
 	  "name" => "enginesize", 
-	  "title" => $options['enginesizetext'],  
-	  "description" => "Enter vehicle engine size.",
+	  "title" => $options['engine_size_text'],  
+	  "description" => __('Enter vehicle engine size.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 "cylinders" => array(
 	  "name" => "cylinders", 
-	  "title" => $options['cylinderstext'],  
-	  "description" => "Enter number of cylinders.",
+	  "title" => $options['number_cylinders_text'],  
+	  "description" => __('Enter number of cylinders.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
-"FRONT_AIR_CONDITIONING" => array(
-	  "name" => "FRONT_AIR_CONDITIONING", 
-	  "title" => 'Front Air Conditioning',  
-	  "description" => "Enter Front Air Conditioning",
+	 
+
+"horsepower" => array(
+	  "name" => "horsepower", 
+	  "title" => $options['horsepower_text'],  
+	  "description" =>  __('Enter vehicle horsepower.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
+	  "width" => "10%",
+	  "options" => ""
+	  ), 
+
+"FRONT_AIR_CONDITIONING" => array(
+	  "name" => "FRONT_AIR_CONDITIONING", 
+	  "title" => __('Front Air Conditioning','language'),  
+	  "description" => __('Enter Front Air Conditioning','language'),
+	  "type" => "text",
+	  "class" => "text",
+	  "rows" => "",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "FRONT_BRAKE_TYPE" => array(
 	  "name" => "FRONT_BRAKE_TYPE", 
-	  "title" => 'Front Brake Type',  
-	  "description" => "Enter Front Brake Type",
+	  "title" => __('Front Brake Type','language'),  
+	  "description" => __('Enter Front Brake Type','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 "ANTILOCK_BRAKING_SYSTEM" => array(
 	  "name" => "ANTILOCK_BRAKING_SYSTEM", 
-	  "title" => 'Antilock Braking System',  
-	  "description" => "Enter Antilock Braking System",
+	  "title" => __('Antilock Braking System','language'),  
+	  "description" => __('Enter Antilock Braking System','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "BRAKING_ASSIST" => array(
 	  "name" => "BRAKING_ASSIST", 
-	  "title" => 'Braking Assist',  
-	  "description" => "Enter Braking Assist",
+	  "title" => __('Braking Assist','language'),  
+	  "description" => __('Enter Braking Assist','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "REAR_BRAKE_DIAMETER" => array(
 	  "name" => "REAR_BRAKE_DIAMETER", 
-	  "title" => 'Rear Brake Diameter',  
-	  "description" => "Enter Rear Brake Diameter",
+	  "title" => __('Rear Brake Diameter','language'),  
+	  "description" => __('Enter Rear Brake Diameter','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 "AUTO_DIMMING_REARVIEW_MIRROR" => array(
 	  "name" => "AUTO_DIMMING_REARVIEW_MIRROR", 
-	  "title" => 'Auto Dimming Rearview Mirror',  
-	  "description" => "Enter Auto Dimming Rearview Mirror",
+	  "title" => __('Auto Dimming Rearview Mirror','language'),  
+	  "description" => __('Enter Auto Dimming Rearview Mirror','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "RUNNING_BOARDS" => array(
 	  "name" => "RUNNING_BOARDS", 
-	  "title" => 'Running Boards',  
-	  "description" => "Enter Running Boards",
+	  "title" => __('Running Boards','language'),  
+	  "description" => __('Enter Running Boards','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),  
 "ROOF_RACK" => array(
 	  "name" => "ROOF_RACK", 
-	  "title" => 'Roof Rack',  
-	  "description" => "Enter Roof Rack",
+	  "title" => __('Roof Rack','language'),  
+	  "description" => __('Enter Roof Rack','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 "POWER_DOOR_LOCKS" => array(
 	  "name" => "POWER_DOOR_LOCKS", 
-	  "title" => 'Power Door Locks',  
-	  "description" => "Enter Power Door Locks",
+	  "title" => __('Power Door Locks','language'),  
+	  "description" => __('Enter Power Door Locks','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),  
 "ANTI_THEFT_ALARM_SYSTEM" => array(
 	  "name" => "ANTI_THEFT_ALARM_SYSTEM", 
-	  "title" => 'Anti Theft Alarm System',  
-	  "description" => "Enter Anti Theft Alarm System",
+	  "title" => __('Anti Theft Alarm System','language'),  
+	  "description" => __('Enter Anti Theft Alarm System','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),  
 "CRUISE_CONTROL" => array(
 	  "name" => "CRUISE_CONTROL", 
-	  "title" => 'Cruise Control',  
-	  "description" => "Enter Cruise Control",
+	  "title" => __('Cruise Control','language'),  
+	  "description" => __('Enter Cruise Control','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""  
 	  ),
 "1ST_ROW_VANITY_MIRRORS" => array(
 	  "name" => "1ST_ROW_VANITY_MIRRORS", 
-	  "title" => 'First Row Vanity Mirrors',  
-	  "description" => "Enter First Row Vanity Mirrors",
+	  "title" => __('First Row Vanity Mirrors','language'),  
+	  "description" => __('Enter First Row Vanity Mirrors','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 "HEATED_DRIVER_SIDE_MIRROR" => array(
 	  "name" => "HEATED_DRIVER_SIDE_MIRROR", 
-	  "title" => 'Heated Driver Side Mirror',  
-	  "description" => "Enter Heated Driver Side Mirror",
+	  "title" => __('Heated Driver Side Mirror','language'),
+	  "description" => __('Enter Heated Driver Side Mirror','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "HEATED_PASSENGER_SIDE_MIRROR" => array(
 	  "name" => "HEATED_PASSENGER_SIDE_MIRROR", 
-	  "title" => 'Heated Driver Passenger Mirror',  
-	  "description" => "Enter Heated Passenger Side Mirror",
+	  "title" => __('Heated Driver Passenger Mirror','language'),  
+	  "description" => __('Enter Heated Passenger Side Mirror','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "TRAILER_WIRING" => array(
 	  "name" => "TRAILER_WIRING", 
-	  "title" => 'Trailer Wiring',  
-	  "description" => "Enter Trailer Wiring",
+	  "title" => __('Trailer Wiring','language'),  
+	  "description" => __('Enter Trailer Wiring','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "TRAILER_HITCH" => array(
 	  "name" => "TRAILER_HITCH", 
-	  "title" => 'Trailer Hitch',  
-	  "description" => "Enter Trailer Hitch",
+	  "title" => __('Trailer Hitch','language'),  
+	  "description" => __('Enter Trailer Hitch','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "CRUISE_CONTROLS_ON_STEERING_WHEEL" => array(
 	  "name" => "CRUISE_CONTROLS_ON_STEERING_WHEEL", 
-	  "title" => 'Cruise Control on Steering Wheel',  
-	  "description" => "Enter Cruise Control on Steering Wheel",
+	  "title" => __('Cruise Control on Steering Wheel','language'),  
+	  "description" => __('Enter Cruise Control on Steering Wheel','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "AUDIO_CONTROLS_ON_STEERING_WHEEL" => array(
 	  "name" => "AUDIO_CONTROLS_ON_STEERING_WHEEL", 
-	  "title" => 'Audio Control on Steering Wheel',  
-	  "description" => "Enter Audio Control on Steering Wheel",
+	  "title" => __('Audio Control on Steering Wheel','language'),  
+	  "description" => __('Enter Audio Control on Steering Wheel','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 "FOLDING_2ND_ROW" => array(
 	  "name" => "FOLDING_2ND_ROW", 
-	  "title" => 'Folding Second Row Seats',  
-	  "description" => "Enter Folding Second Row Seats",
+	  "title" => __('Folding Second Row Seats','language'),  
+	  "description" => __('Enter Folding Second Row Seats','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 	  
 	  "1ST_ROW_POWER_OUTLET" => array(
 	  "name" => "1ST_ROW_POWER_OUTLET", 
-	  "title" => 'First Row Power Outlet',  
-	  "description" => "Enter First Row Power Outlet",
+	  "title" => __('First Row Power Outlet','language'),  
+	  "description" => __('Enter First Row Power Outlet','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 	  
 	  "CARGO_AREA_POWER_OUTLET" => array(
 	  "name" => "CARGO_AREA_POWER_OUTLET", 
-	  "title" => 'Cargo Area Power Outlet',  
-	  "description" => "Enter Cargo Area Power Outlet",
+	  "title" => __('Cargo Area Power Outlet','language'),  
+	  "description" => __('Enter Cargo Area Power Outlet','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 	  
 	  "INDEPENDENT_SUSPENSION" => array(
 	  "name" => "INDEPENDENT_SUSPENSION", 
-	  "title" => 'Independent Suspension',  
-	  "description" => "Enter Independent Suspension",
+	  "title" => __('Independent Suspension','language'),  
+	  "description" => __('Enter Independent Suspension','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 	    
 	  "REAR_SUSPENSION_TYPE" => array(
 	  "name" => "REAR_SUSPENSION_TYPE", 
-	  "title" => 'Rear Suspension Type',  
-	  "description" => "Enter Rear Suspension Type",
+	  "title" => __('Rear Suspension Type','language'),  
+	  "description" => __('Enter Rear Suspension Type','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
@@ -497,12 +506,12 @@ $feat_boxes = array(
 	    
 	  "FRONT_SUSPENSION_TYPE" => array(
 	  "name" => "FRONT_SUSPENSION_TYPE", 
-	  "title" => 'Front Suspension Type',  
-	  "description" => "Enter Front Suspension Type",
+	  "title" => __('Front Suspension Type','language'),  
+	  "description" => __('Enter Front Suspension Type','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
@@ -510,36 +519,36 @@ $feat_boxes = array(
 	    
 	  "INDEPENDENT_SUSPENSION" => array(
 	  "name" => "INDEPENDENT_SUSPENSION", 
-	  "title" => 'Independent Suspension',  
-	  "description" => "Enter Independent Suspension",
+	  "title" => __('Independent Suspension','language'),  
+	  "description" => __('Enter Independent Suspension','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 	  	  	  
 	   "MAX_CARGO_CAPACITY" => array(
 	  "name" => "MAX_CARGO_CAPACITY", 
-	  "title" => 'Maximum Cargo Capacity Suspension',  
-	  "description" => "Enter Maximum Cargo Capacity Suspension",
+	  "title" => __('Maximum Cargo Capacity Suspension','language'),  
+	  "description" => __('Enter Maximum Cargo Capacity Suspension','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
 	 	  	  	  
 	   "PASSENGER_AIRBAG" => array(
 	  "name" => "PASSENGER_AIRBAG", 
-	  "title" => 'Passenger Airbags',  
-	  "description" => "Enter Passenger Airbags",
+	  "title" => __('Passenger Airbags','language'),  
+	  "description" => __('Enter Passenger Airbags','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
@@ -553,7 +562,7 @@ $feat_boxes = array(
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 
@@ -566,19 +575,19 @@ $feat_boxes = array(
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 */ 	  	  
 "enginetype" => array(
 	  "name" => "enginetype", 
-	  "title" => $options['enginetypetext'],  
-	  "description" => "Enter vehicle engine type.",
+	  "title" => $options['engine_type_text'],  
+	  "description" => __('Enter vehicle engine type.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 	  
@@ -590,7 +599,7 @@ $feat_boxes = array(
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ), 	  
@@ -601,7 +610,7 @@ $feat_boxes = array(
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),	  
@@ -613,118 +622,118 @@ $feat_boxes = array(
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 */
 "fuelcapacity" => array(
 	  "name" => "fuelcapacity", 
-	  "title" => $options['fuelcapacitytext'],  
-	  "description" => "Enter vehicle fuel capacity.",
+	  "title" => $options['fuel_capacity_text'],  
+	  "description" => __('Enter vehicle fuel capacity.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "wheelbase" => array(
 	  "name" => "wheelbase", 
-	  "title" => $options['wheelbasetext'],  
-	  "description" => "Enter vehicle wheelbase.",
+	  "title" => $options['wheelbase_text'],  
+	  "description" => __('Enter vehicle wheelbase'.'language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "overalllength" => array(
 	  "name" => "overalllength", 
-	  "title" => $options['overalllengthtext'],  
-	  "description" => "Enter vehicle overall length.",
+	  "title" => $options['overall_length_text'],  
+	  "description" => __('Enter vehicle overall length','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "width" => array(
 	  "name" => "width", 
-	  "title" => $options['widthtext'],  
-	  "description" => "Enter vehicle width.",
+	  "title" => $options['width_text'],  
+	  "description" => __('Enter vehicle width','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),	  
 "height" => array(
 	  "name" => "height", 
-	  "title" => $options['heighttext'],  
-	  "description" => "Enter vehicle height.",
+	  "title" => $options['height_text'],  
+	  "description" => __('Enter vehicle height.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "curbweighttext" => array(
 	  "name" => "curbweight", 
-	  "title" => $options['curbweighttext'],  
-	  "description" => "Enter vehicle curb weight.",
+	  "title" => $options['curb_weight_text'],  
+	  "description" => __('Enter vehicle curb weight','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),	  		  
 "legroom" => array(
 	  "name" => "legroom", 
-	  "title" => $options['legroomtext'],  
-	  "description" => "Enter vehicle leg room.",
+	  "title" => $options['leg_room_text'],  
+	  "description" => __('Enter vehicle leg room','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "headroom" => array(
 	  "name" => "headroom", 
-	  "title" => $options['headroomtext'],  
-	  "description" => "Enter vehicle head room.",
+	  "title" => $options['head_room_text'],  
+	  "description" => __('Enter vehicle head room.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),
 "seatingcapacity" => array(
 	  "name" => "seatingcapacity", 
-	  "title" => $options['seatingcapacitytext'],  
-	  "description" => "Enter vehicle seating capacity.",
+	  "title" => $options['seating_text'],  
+	  "description" => __('Enter vehicle seating capacity','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 		),
 "tires" => array(
 	  "name" => "tires", 
-	  "title" => $options['tirestext'],  
-	  "description" => "Enter vehicle tires.",
+	  "title" => $options['tires_text'],  
+	  "description" => __('Enter vehicle tires.','language'),
 	  "type" => "text",
 	  "class" => "text",
 	  "rows" => "",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "width" => "10%",
 	  "options" => ""
 	  ),  
@@ -732,15 +741,15 @@ $feat_boxes = array(
 ?>
 <?php
 $mod3 = "mod3";
-include(TEMPLATEPATH."/functions/var/default-box-three.php");
+$options = my_get_theme_options();
 $comment_boxes = array(
   	"comment_area" => array(
 	  "name" => "comment_area", 
-	  "title" => $options['commentstext'],  
+	  "title" => $options['description_text'],  
 	  "description" => "",
 	  "type" => "textarea",
 	  "class" => "textarea",
-	  "hide_in_search" => "Yes",
+	  "hide_in_search" => 'on',
 	  "rows" => "20%",
 	  "width" => "80%",
 	  "height" => "30%",
@@ -748,17 +757,16 @@ $comment_boxes = array(
 );
 
 $feat = "feat1";
-$options = get_option('gorilla_fields');
-include(TEMPLATEPATH."/functions/var/default-box-one.php");
+$options = my_get_theme_options();
 $featured_post = array(
 	  "featured" => array(
 	  "name" => "featured",   
-	  "title" => $options['featuredtext'],
-	  "description" => "If selected 'Yes' the image of this post will be displayed in the home slideshow.",
+	  "title" => $options['featured_text'],
+	  "description" => __('If YES selected the image of this post will be displayed in the home slideshow.','language'),
 	  "type" => "dropdown",	
 	  "class" => 'dropdown',
-	  "hide_in_search" => 'Yes',
-	  "options" => array("1" => "No", "2" => "Yes"),
+	  "hide_in_search" => 'on',
+	  "options" => array("1" => __('No','language'), "2" => __('Yes','language')),
 		));
 
 ?>
@@ -1134,17 +1142,18 @@ function meta_box_callback( $post )
 {	global $options;$fields;$options2;$options3;$symbols;
 			  $fields = get_post_meta($post->ID, 'mod1', true);
 			  $symbols = get_option('gorilla_symbols');
+			  $options = my_get_theme_options();
     $values = get_post_custom( $post->ID );
     $selected = isset( $values['meta_box_craigslist_embed'] ) ? $values['meta_box_craigslist_embed'][0] : '';
 
     wp_nonce_field( 'my_meta_box_nonce', 'meta_box_nonce' );?> 
 <p style="border-bottom:1px solid #f1f1f1;padding-bottom:3px;"><div style="height:200px;width:130px;padding:6px 0 0 5px;font-size:12px;color:#252525; font-style:normal;font-weight:bold;float: left;"><?php _e('Craigslist Code:','language');?><br/><br/><span
  style="font-weight:normal!important;font-size:11px;margin-top:15px;font-style:italic;"><?php echo _e('Copy & Paste the generated code into your Craigslist ad.','language');?></span></div></p>
-<textarea name="meta_box_craigslist_embed" id="meta_box_craigslist_embed" style="width:80%;height:300px;" ><table border="0" cellspacing="2" cellpadding="2" width="750" bgcolor="#ffffff"><tbody><tr><td align="center"><h1><?php if ( $fields['year']){ echo $fields['year']; echo ' ';}else {  echo ''; }?><?php the_title();?></h1><hr /><table border="0" cellspacing="2" cellpadding="2" width="750" align="center"><tbody><tr align="center"><td></td><td align="center"><b><?php _e('Contact:','language');?></b> <?php echo $symbols['phone']; ?></td><td align="center"></td><td></td></tr></tbody></table></td></tr><tr><td align="center"><table border="0" cellspacing="2" cellpadding="2" width="500"><tbody><tr><td></td><td><ul><?php if ( $fields['price']){ echo '<li>'.$options['pricetext'].': '.$symbols['currency']; echo $fields['price'].'</li>';}else {  echo ''; } ?><?php if ( $fields['blackbookprice']){ echo '<li>'.$options['blackbookpricetext'].': '.$symbols['currency']; echo $fields['blackbookprice'].'</li>';}else {  echo ''; } ?><?php	if ( $fields['miles']){ echo '<li>'.$options['milestext'].': '.$fields['miles'].'</li>';}else {  echo ''; }?><?php if ( $fields['vehicletype']){ echo '<li>'.$options['vehicletypetext'].': '.$fields['vehicletype'].'</li>';}else {  echo ''; }?><?php if ( $fields['drive']){ echo '<li>'.$options['drivetext'].': '.$fields['drive'].'</li>';}else {  echo ''; }?><?php if ( $fields['transmission']){ echo '<li>'.$options['transmissiontext'].': '.$fields['transmission'].'</li>';}else {  echo ''; }?></ul></td><td><ul><?php if ( $fields['exterior']){ echo '<li>'.$options['exteriortext'].': '.$fields['exterior'].'</li>';}else {  echo ''; }?><?php if ( $fields['interior']){ echo '<li>'.$options['interiortext'].':'.$fields['interior'].'</li>';}else {  echo ''; }?><?php	if ( $fields['epamileage']){ echo '<li>'.$options['epamileagetext'].': '.$fields['epamileage'].'</li>';}else {  echo ''; }?><?php if ( $fields['stock']){ echo '<li>'.$options['stocktext'].': '.$fields['stock'].'</li>';}else {  echo ''; }?><?php if ( $fields['vin']){ echo '<li>'.$options['vintext'].': '.$fields['vin'].'</li>';}else {  echo ''; }?></ul></td><td></td></tr></tbody></table></td></tr><tr><td align="center"><br/><br/></td></tr><tr><td><p><b><?php _e('Description','language');?></b></p><p></p><p><?php $trim_length = 200;$values = get_post_meta($post->ID, 'mod3', true);foreach($values as $value) {add_filter( 'custom_filter', 'wpautop' );echo apply_filters( 'custom_filter', $value );} ?><p><b><?php _e('Features','language');?></b></p><p></p><?php	if (get_the_terms($post->ID, 'features')) {$taxonomy = get_the_terms($post->ID, 'features');foreach ($taxonomy as $taxonomy_term) {?><li style="float: left;position: relative;overflow: hidden;width: 207px;padding: 10px 0px;padding-left: 24px;margin: 0px 4px 0 4px;font-size: 14px;border-bottom: 1px dotted grey;font-weight:bold;"><?php echo $taxonomy_term->name;?></li><?php } } ?><br/></p></p></td></tr><td align="center"><br/></td></tbody></table></textarea><?php }
+<textarea name="meta_box_craigslist_embed" id="meta_box_craigslist_embed" style="width:80%;height:300px;" ><h1><?php if ( isset($fields['year'])){ echo $fields['year']; echo ' ';}else {  echo ''; }?><?php the_title();?></h1><hr /><b><?php _e('Contact:','language');?></b> <?php echo $symbols['phone']; ?><b><?php _e('Website:','language');?></b> <a href="<?php the_permalink();?>"><?php the_title();?></a><ul><?php if ( isset($fields['price'])){ echo '<li>'.$options['price_text'].': '.$symbols['currency']; echo $fields['price'].'</li>';}else {  echo ''; } ?><?php   if ( isset($fields['miles'])){ echo '<li>'.$options['miles_text'].': '.$fields['miles'].'</li>';}else {  echo ''; }?><?php if ( isset($fields['vehicletype'])){ echo '<li>'.$options['vehicle_type_text'].': '.$fields['vehicletype'].'</li>';}else {  echo ''; }?><?php if ( isset($fields['drive'])){ echo '<li>'.$options['drive_text'].': '.$fields['drive'].'</li>';}else {  echo ''; }?><?php if ( isset($fields['transmission'])){ echo '<li>'.$options['transmission_text'].': '.$fields['transmission'].'</li>';}else {  echo ''; }?></ul></td><td><ul><?php if ( isset($fields['exterior'])){ echo '<li>'.$options['exterior_text'].': '.$fields['exterior'].'</li>';}else {  echo ''; }?><?php if ( isset($fields['interior'])){ echo '<li>'.$options['interior_text'].':'.$fields['interior'].'</li>';}else {  echo ''; }?><?php   if ( isset($fields['epamileage'])){ echo '<li>'.$options['epa_mileage_text'].': '.$fields['epamileage'].'</li>';}else {  echo ''; }?><?php if ( isset($fields['stock'])){ echo '<li>'.$options['stock_text'].': '.$fields['stock'].'</li>';}else {  echo ''; }?><?php if ( isset($fields['vin'])){ echo '<li>'.$options['vin_text'].': '.$fields['vin'].'</li>';}else {  echo ''; }?></ul><br/><a href="<?php the_permalink();?>"><strong><?php _e('VIEW PHOTO GALLERY AND FULL VEHICLE DETAILS','language'); ?></strong></a><br/><p><b><?php _e('Description','language');?></b></p><p><?php $trim_length = 200;$values = get_post_meta($post->ID, 'mod3', true);if (is_array($values)){foreach($values as $value) {add_filter( 'custom_filter', 'wpautop' );echo apply_filters( 'custom_filter', $value );}} ?><p><b><?php _e('Features','language');?></b></p><p></p><?php   if (get_the_terms($post->ID, 'features')) {$taxonomy = get_the_terms($post->ID, 'features');foreach ($taxonomy as $taxonomy_term) {?><li style="float: left;position: relative;overflow: hidden;width: 207px;padding: 10px 0px;padding-left: 24px;margin: 0px 4px 0 4px; border-bottom: 1px dotted grey;"><?php echo $taxonomy_term->name;?></li><?php } } ?><br/><br/><div style="clear: both;"></div><br/><a href="<?php the_permalink();?>"><strong><?php _e('VIEW PHOTO GALLERY AND FULL VEHICLE DETAILS','language'); ?></strong></textarea><?php }
 add_action( 'save_post', 'meta_box_craigslist_save' );
 function meta_box_craigslist_save( $post_id )
-{
-    // Bail if we're doing an auto save
+{    // Bail if we're doing an auto save
+
     if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 
     // if our nonce isn't there, or we can't verify it, bail
@@ -1194,7 +1203,7 @@ function save_gallery() {
 		
 		update_post_meta($_POST['post_id'], 'CarsGallery', $All_IDS);
 		global $field;
-		//wp_delete_attachment($_POST['image_id']);
+		wp_delete_attachment($_POST['image_id']);
 		$saved = get_post_custom_values('CarsGallery', $_POST['post_id']);
 		$saved = explode(',',$saved[0]);
 		//Get gallery images from posts table
@@ -1234,7 +1243,7 @@ function save_gallery() {
 		
 		update_post_meta($_POST['post_id'], 'CarsGallery', $All_IDS);
 		global $field;
-		//wp_delete_attachment($_POST['image_id']);
+		wp_delete_attachment($_POST['image_id']);
 		$saved = get_post_custom_values('CarsGallery', $_POST['post_id']);
 		$saved = explode(',',$saved[0]);
 		//Get gallery images from posts table
@@ -1267,7 +1276,7 @@ function save_gallery() {
 				unset($saved[$key]);			
 				$saved = implode(',',$saved);
 				update_post_meta($_POST['postid'], 'CarsGallery', $saved);			
-				//wp_delete_attachment($_POST['image_id']);
+				wp_delete_attachment($_POST['image_id']);
 				die('0');				
 			}
 		}
@@ -1285,7 +1294,7 @@ function save_gallery() {
 				unset($saved[$key]);			
 				$saved = implode(',',$saved);
 				update_post_meta($_POST['postid'], 'CarsGallery', $saved);			
-				//wp_delete_attachment($_POST['image_id']);
+				wp_delete_attachment($_POST['image_id']);
 				die('0');				
 			}
 		}
@@ -1383,7 +1392,7 @@ add_meta_box( 'gallery_user', __('Photo Gallery','language'), 'show_user','user_
 		echo '</table>';
         echo '<div id="tgm-new-media-settings">';
         echo '<p><a href="#" class="tgm-open-media button button-primary" title="' . 
-		esc_attr__( 'Upload Images', 'tgm-nmp' ) . '">' . __( 'Upload Images', 'tgm-nmp' ) . '</a></p>';
+		esc_attr__( 'Upload Images', 'language' ) . '">' . __( 'Upload Images', 'language' ) . '</a></p>';
         echo '<input type="hidden" name="CarsGallery" id="tgm-new-media-image" size="70" value="' . $AllImagesImp . '" />';
         echo '</div>';						
 	}
@@ -1453,7 +1462,7 @@ add_meta_box( 'gallery_user', __('Photo Gallery','language'), 'show_user','user_
 		echo '</table>';
         echo '<div id="tgm-new-media-settings">';
         echo '<p><a href="#" class="tgm-open-media button button-primary" title="' . 
-		esc_attr__( 'Add - Delete Images', 'tgm-nmp' ) . '">' . __( 'Add - Delete Images', 'tgm-nmp' ) . '</a></p>';
+		esc_attr__( 'Add - Delete Images', 'language' ) . '">' . __( 'Add - Delete Images', 'language' ) . '</a></p>';
         echo '<input type="hidden" name="CarsGallery" id="tgm-new-media-image" size="70" value="' . $AllImagesImp . '" />';
         echo '</div>';						
 	}
@@ -1467,8 +1476,8 @@ function assets() {
   wp_register_script( 'tgm-nmp-media', get_bloginfo('template_url') . '/media.js', array( 'jquery' ), '1.0.0', true );
   wp_localize_script( 'tgm-nmp-media', 'tgm_nmp_media',
 	  array(
-		  'title'     => __( 'Upload or Choose Your Custom Image File', 'tgm-nmp' ),
-		  'button'    => __( 'Insert Image into Input Field', 'tgm-nmp' ) 
+		  'title'     => __( 'Upload or Choose Your Custom Image File', 'language' ),
+		  'button'    => __( 'Insert Image into Input Field', 'language' ) 
 	  )
   );
   wp_enqueue_script( 'tgm-nmp-media' );

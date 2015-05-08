@@ -1,29 +1,14 @@
 jQuery(document).ready(function(){
-
-	console.log('ok');
-	var count = $("#gallery").children().length - 2;
-
     $('#gallery').cycle({
         fx:     'fade',
         speed:  'slow',
         timeout: 0,
-        startingSlide: count,
         pager:  '#nav',
         pagerAnchorBuilder: function(idx, slide) {
             // return sel string for existing anchor
             return '#nav li:eq(' + (idx) + ') a';
         }
     });
-
-	//Remove Title on video (hides player controls)
-	if ( $('#video-thumb').hasClass('activeSlide') ) {
-		$('#gallery').next('h1.hideOnSearch').toggleClass('hidden');
-	} else {
-		$('#gallery').next('h1.hideOnSearch').removeClass('hidden');
-	} ;
-
-
-
 	$('ul.news > li:last-child').addClass('last-child');
 	$("#contactForm").validate();
 	$('.slides_container h2').show();
@@ -135,8 +120,6 @@ jQuery(document).ready(function(){
 		$('.item-list ul.active').removeClass('active').fadeOut(0,function(){
 			$('.contact-tab-form').fadeIn(0).addClass('active');	
 		})});  
-
-		var galleryVideo = $('.gallery-video');
         var selectorE = 'a.gallery';
 		var instanceE = $( selectorE ).imageLightbox(
 		{
@@ -145,7 +128,6 @@ jQuery(document).ready(function(){
 			onLoadStart: function() { activityIndicatorOn(); },
 			onLoadEnd:	 function() { navigationUpdate( selectorE ); activityIndicatorOff(); }
 		});
-
         $('#bigphoto').imageLightbox(
 		{
 			onStart: 	 function() { overlayOn();  },
@@ -174,7 +156,6 @@ jQuery(document).ready(function(){
 			navigationOn = function( instance, selector )
 			{
 				var images = $( selector );
-
 				if( images.length )
 				{
 					var nav = $( '<div id="imagelightbox-nav"></div>' );
@@ -215,4 +196,3 @@ jQuery(document).ready(function(){
 			$(this).removeAttr( 'height' );
 			});
 });
-

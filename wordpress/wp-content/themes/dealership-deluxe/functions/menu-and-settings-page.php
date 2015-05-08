@@ -1,17 +1,14 @@
-<?php
-	add_action('admin_menu', 'build_page');	
-function build_page() 
-	{
+<?php 	add_action('admin_menu', 'build_page');
+	function build_page() 
+		{
 		global $submenu;
-		$submenu['edit.php?post_type=gtcd'][5][0] = __('View All Vehicles','language');
-		$submenu['edit.php?post_type=user_listing'][5][0] = __('View All Vehicles','language');
-		add_menu_page(__('Setup Page','language'), __('Setup Module','language'), 'add_users', 'setup_page', 'settings_page', 'dashicons-admin-generic',11.6); 
-		add_submenu_page('setup_page', __('Setup Options','language'), __('Search Module','language'), 'add_users', 'setup_page', 'settings_page');
-		add_submenu_page('setup_page', __('Dealership Setup','language'), __('Currency & Metrics','language'), 'add_users', 'currency_metrics', 'cm_settings_page'); 
-		add_submenu_page('setup_page', __('Edmunds API Setup','language'), __('Edmunds API Setup','language'), 'add_users', 'edmund_api', 'cm_Edmund_API_page');
-		
+		$submenu['edit.php?post_type=gtcd'][5][0] = __('View All Listings','language');
+		$submenu['edit.php?post_type=user_listing'][5][0] = __('View All Listings','language');
+	    add_theme_page(__('Currency and Metrics','language'),  __('Currency & Metrics','language'), 'add_users','currency_page', 'cm_settings_page','dashicons-admin-generic');
+
+	add_theme_page(__('VIN Decoder Setup','language'),  __('VIN Decoder Setup','language'), 'add_users','edmund_api', 'cm_Edmund_API_page','dashicons-admin-generic');
 	}
-	add_action('admin_init', 'reg_fields'); 
+add_action('admin_init', 'reg_fields'); 
 function reg_fields() 
 	{
 		add_settings_section('main_section', '', 'gorilla_t', 'currency_metrics');
@@ -20,48 +17,8 @@ function reg_fields()
 		register_setting('gorilla_symbols', 'gorilla_symbols', 'validate_symbols');		
 		add_settings_field('currency', '<span class="optionmain"><strong>'.(__('Your Currency:','language')).'</strong></span>', 'currency_setting','currency_metrics', 'main_section');
 		add_settings_field('metric', '<span class="optionmain"><strong>'.(__('Metric:','language')).'</strong></span>', 'metric_setting', 'currency_metrics', 'main_section');
-		add_settings_field('featuredtext', '<span class="optionmain"><strong>Featured:</strong></span>', 'featured_text', 'fields', 'main_section');
-		add_settings_field('topdealtext', '<span class="optionmain"><strong>Top Deal?:</strong></span>', 'topdeal_text', 'fields', 'main_section');
-		add_settings_field('statustagtext', '<span class="optionmain"><strong>'.(__('Condition:','language')).'</strong></span>', 'statustag_text', 'fields', 'main_section');
- 		add_settings_field('drivetext', '<span class="optionmain"><strong>'.(__('Drive:','language')).'</strong></span>', 'drive_text', 'fields', 'main_section');
- 		add_settings_field('epamileagetext', '<span class="optionmain"><strong>'.(__('EPA Mileage:','language')).'</strong></span>', 'epamileage_text', 'fields', 'main_section');
- 		add_settings_field('transmissiontext', '<span class="optionmain"><strong>'.(__('Transmission:','language')).'</strong></span>', 'transmission_text', 'fields', 'main_section');
- 		add_settings_field('stocktext', '<span class="optionmain"><strong>'.(__('Stock #:','language')).'</strong></span>', 'stock_text', 'fields', 'main_section');
- 		add_settings_field('vintext', '<span class="optionmain"><strong>'.(__('VIN:','language')).'</strong></span>', 'vin_text', 'fields', 'main_section');
- 		add_settings_field('carfaxtext', '<span class="optionmain"><strong>'.(__('Carfax Partner ID:','language')).'</strong></span>', 'carfax_text', 'fields', 'main_section');
-		add_settings_field('interiortext', '<span class="optionmain"><strong>'.(__('Interior:','language')).'</strong></span>', 'interior_text', 'fields', 'main_section');
-		add_settings_field('exteriortext', '<span class="optionmain"><strong>'.(__('Exterior:','language')).'</strong></span>', 'exterior_text', 'fields', 'main_section');
-		add_settings_field('commentstext', '<span class="optionmain"><strong>'.(__('Description','language')).'</strong></span>:', 'comments_text', 'fields', 'main_section');
-		add_settings_field('torquetext', '<span class="optionmain"><strong>'.(__('Torque #:','language')).'</strong></span>', 'torque_text', 'fields', 'main_section');
-		add_settings_field('pricetext', '<span class="optionmain"><strong>'.(__('Price:','language')).'</strong></span>', 'price_text', 'fields', 'main_section');
-		add_settings_field('vehicletypetext', '<span class="optionmain"><strong>'.(__('Vehicle Type:','language')).'</strong></span>', 'vehicletype_text', 'fields', 'main_section');
-		add_settings_field('milestext', '<span class="optionmain"><strong>'.(__('Miles:','language')).'</strong></span>', 'miles_text', 'fields', 'main_section');
-		add_settings_field('year_text', '<span class="optionmain"><strong>'.(__('Year:','language')).'</strong></span>', 'year_text', 'fields', 'main_section');
-		add_settings_field('yearnum_text', '<span class="optionmain"><strong>'.(__('Year Start/End Date:','language')).'</strong></span>', 'year_num', 'fields', 'main_section');
-		add_settings_field('locationtext', '<span class="optionmain"><strong>'.(__('Location:','language')).'</strong></span>', 'location_text', 'fields', 'main_section');
-		add_settings_field('makemodeltext', '<span class="optionmain"><strong>'.(__('Make & Model:','language')).'</strong></span>', 'makemodel_text', 'fields', 'main_section');
-		add_settings_field('featurestext', '<span class="optionmain"><strong>'.(__('Features:','language')).'</strong></span>', 'features_text', 'fields', 'main_section');
-		add_settings_field('enginesizetext', '<span class="optionmain"><strong>'.(__('Engine Size:','language')).'</strong></span>', 'enginesize_text', 'fields', 'main_section');
-		add_settings_field('cylinderstext', '<span class="optionmain"><strong>'.(__('Number of Cylinders:','language')).'</strong></span>', 'cylinders_text', 'fields', 'main_section');
-		add_settings_field('horsepowertext', '<span class="optionmain"><strong>'.(__('Horsepower:','language')).'</strong></span>', 'horsepower_text', 'fields', 'main_section');
-		add_settings_field('torquetext', '<span class="optionmain"><strong>'.(__('Torque:','language')).'</strong></span>', 'torque_text', 'fields', 'main_section');
-		add_settings_field('compressionratiotext', '<span class="optionmain"><strong>'.(__('Compression Ratio:','language')).'</strong></span>', 'compressionratio_text', 'fields', 'main_section');
-		add_settings_field('camshaft', '<span class="optionmain"><strong>'.(__('Camshaft:','language')).'</strong></span>', 'camshaft_text', 'fields', 'main_section');
-		add_settings_field('enginetypetext', '<span class="optionmain"><strong>'.(__('Engine Type:','language')).'</strong></span>', 'enginetype_text', 'fields', 'main_section');
-		add_settings_field('boretext', '<span class="optionmain"><strong>'.(__('Bore:','language')).'</strong></span>', 'bore_text', 'fields', 'main_section');
-		add_settings_field('stroketext', '<span class="optionmain"><strong>'.(__('Stroke:','language')).'</strong></span>', 'stroke_text', 'fields', 'main_section');
-		add_settings_field('valvespercylindertext', '<span class="optionmain"><strong>'.(__('Valves per Cylinder:','language')).'</strong></span>', 'valvespercylinder_text', 'fields', 'main_section');
-		add_settings_field('fuelcapacitytext', '<span class="optionmain"><strong>'.(__('Fuel Capacity:','language')).'</strong></span>', 'fuelcapacity_text', 'fields', 'main_section');
-		add_settings_field('wheelbasetext', '<span class="optionmain"><strong>'.(__('Wheelbase:','language')).'</strong></span>', 'wheelbase_text', 'fields', 'main_section');
-		add_settings_field('overalllength', '<span class="optionmain"><strong>'.(__('Overall Length:','language')).'</strong></span>', 'overalllength_text', 'fields', 'main_section');
-		add_settings_field('widthtext', '<span class="optionmain"><strong>'.(__('Width:','language')).'</strong></span>', 'width_text', 'fields', 'main_section');
-		add_settings_field('heighttext', '<span class="optionmain"><strong>'.(__('Height:','language')).'</strong></span>', 'height_text', 'fields', 'main_section');
-		add_settings_field('curbweighttext', '<span class="optionmain"><strong>'.(__('Curb Weight:','language')).'</strong></span>', 'curbweight_text', 'fields', 'main_section');
-		add_settings_field('legroomtext', '<span class="optionmain"><strong>'.(__('Leg Room:','language')).'</strong></span>', 'legroom_text', 'fields', 'main_section');
-		add_settings_field('headroomtext', '<span class="optionmain"><strong>'.(__('Head Room:','language')).'</strong></span>', 'headroom_text', 'fields', 'main_section');
-		add_settings_field('seatingcapacitytext', '<span class="optionmain"><strong>'.(__('Seating Capacity (Std.):','language')).'</strong></span>', 'seatingcapacity_text', 'fields', 'main_section');
-		add_settings_field('tirestext', '<span class="optionmain"><strong>'.(__('Tires (Std.):','language')).'</strong></span>', 'tires_text', 'fields', 'main_section');
-	}
+			}
+
 function cm_settings_page() 
 	{
 	?>

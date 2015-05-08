@@ -1,37 +1,14 @@
 <?php get_header();?>
-
 		<?php if (have_posts()) :  while (have_posts()) : the_post();?>	 
-		<?php require_once(TEMPLATEPATH."/functions/var/default-box-one.php");
-			  require_once(TEMPLATEPATH."/functions/var/default-box-two.php");
-			  require_once(TEMPLATEPATH."/functions/var/default-box-three.php");
+		<?php
 			  global $options;$fields;$options2;$options3;$symbols;
 			  $fields = get_post_meta($post->ID, 'mod1', true);
 			  $options2 = get_post_meta($post->ID, 'mod2', true);
 			  $options3 = get_post_meta($post->ID, 'mod3', true);
 			  $symbols = get_option('gorilla_symbols');
-			  $options = get_option('gorilla_fields');
+			  $options = my_get_theme_options();
 			  ?>
-
-        <div class="title-section">
-            
-              <?php 
-                $crb_currency = $symbols['currency'];
-                $crb_price = number_format($fields['price']);
-
-                if ($crb_currency && $crb_price) {
-                  $item_value  =  ' - ' . $crb_currency . $crb_price;
-                }
-              ?>
-              <h1 class="pagetitle hideOnSearch">
-                <?php echo get_the_title() . ( isset($item_value) ? $item_value : '' )?>
-              </h1>
-            
-        </div><!-- /.title-section -->
-			  <div class="top-single-bar hide">
-            <div class="backToInventory show-for-small"><a href="javascript: history.go(-1)">< Back</a></div>
-            <div class="show-for-small refine-search-single"><a id="searchBoxPop2" href="#"></a></div>
-            <div class="clear"></div>
-            </div>
+			
             <div id="sidebar-search" > 
 		<?php if ( ! dynamic_sidebar( 'Search Module' )) : ?>
 				<?php endif; ?>
@@ -40,7 +17,7 @@
             <div class="detail-page-content hideOnSearch">
              
                <div class="clear"></div>
-	                <h3 class="show-for-small"><?php if (is_numeric( $fields['blackbookprice'])){ echo 'Black Book Price: <span class="strike">'.$symbols['currency']; echo number_format($fields['blackbookprice']);}else {  echo $fields['blackbookprice']; } ?></span></h3><h3 class="show-for-small"><?php if (is_numeric( $fields['price'])){ echo $options['pricetext'].': '.$symbols['currency']; echo number_format($fields['price']);}else {  echo $fields['price']; } ?></h3>
+	                <h3 class="show-for-small"><?php if (is_numeric( $fields['price'])){ echo $options['price_text'].': '.$symbols['currency']; echo number_format($fields['price']);}else {  echo $fields['price']; } ?></h3>
                  <div class="clear"></div>	                    			
 			<div id="gallery_holder" class="big-view hideOnSearch">	
 			<div class="cpsAjaxLoaderSlider"></div> 
@@ -48,7 +25,43 @@
                   		    <?php gallery($post->ID,'large'); ?>               	
                             <div style="clear:both"></div>                   	
                    </div> 
-                   
+                   <h1 class="hideOnSearch"><?php if (isset( $fields['year'])){ echo $fields['year'].' ';} else {  echo ''; } ?>   
+                       <?php if ($post->post_type == "gtcd") { the_title();if (isset( $fields['price'])){ echo ' | <span class="price_slider">'.'  '.$symbols['currency']; echo number_format($fields['price']).'</span> ';
+	                       
+	                       
+	                       
+	                       
+	                       
+	                       $terms = get_the_terms( $post->ID , 'location' );
+
+
+$output = array();
+foreach((array) $terms as $term){
+  $output[] = $term->name;
+}
+
+if ( empty( $terms ) ) {
+
+		} else {
+
+ echo '| '. $options['location_text'].': ';
+echo implode(', ', $output); }   
+       
+    
+ 
+
+
+ 
+
+	                       
+	                       
+	                       
+	                       
+	                       
+	                       
+                       }else {  echo ''; }
+}else { the_title();}?>
+</h1>
 
                      <div style="clear:both"></div> 
                     <div class="cpsAjaxLoaderResults"></div> 
@@ -57,46 +70,35 @@
 							<?php gallery_thumbs($post->ID,'thumbnail'); ?>							
 						</ul>				
 						</div>				
-						</div>
-
+						</div>								 
 <div class="tabs hideOnSearch">
 	<span class="overview-tab active">
 		<?php _e('Overview','language');?>
-	</span>				
-
+	</span>										
 	<span class="features-tab">
 		<?php _e('Features','language');?>
 	</span>													
-        <span class="contact-tab">
-    		<?php _e('Contact','language');?>
-    	</span>
-
-	    <div class="item-list">
-            <div class="cpsAjaxLoaderResults"></div> 
-
-		    <ul class="overview active first  quick-list-feat quick-glance">						
-
-				<?php
-                    if ( $fields['blackbookprice']) { 
-                        echo '<li><p class="strong">Black Book Price: <div class="strike">'.$symbols['currency']; 
-                        echo number_format($fields['blackbookprice']).'</div></p></li>';
-                    } else {  
-                        echo ''; 
-                    } 
-                    if ( $fields['price']) { 
-                        echo '<li><p class="strong">'.$options['pricetext'].':</p> '.$symbols['currency']; 
-                        echo number_format($fields['price']).'</li>';
-                    } else {  echo ''; 
-                    } 
-                if ( $fields['miles']){ echo '<li><p class="strong">'.$options['milestext'].':</p> '.$fields['miles'].'</li>';}else {  echo ''; }?>
-            			<?php	if ( $fields['vehicletype']){ echo '<li><p class="strong">'.$options['vehicletypetext'].':</p> '.$fields['vehicletype'].'</li>';}else {  echo ''; }?>
-            			<?php	if ( $fields['drive']){ echo '<li><p class="strong">'.$options['drivetext'].':</p> '.$fields['drive'].'</li>';}else {  echo ''; }?>
-            			<?php	if ( $fields['transmission']){ echo '<li><p class="strong">'.$options['transmissiontext'].':</p> '.$fields['transmission'].'</li>';}else {  echo ''; }?>
-            			<?php	if ( $fields['exterior']){ echo '<li><p class="strong">'.$options['exteriortext'].':</p> '.$fields['exterior'].'</li>';}else {  echo ''; }?>
-   						<?php	if ( $fields['interior']){ echo '<li><p class="strong">'.$options['interiortext'].':</p> '.$fields['interior'].'</li>';}else {  echo ''; }?>
-   						<?php	if ( $fields['epamileage']){ echo '<li><p class="strong">'.$options['epamileagetext'].':</p> '.$fields['epamileage'].'</li>';}else {  echo ''; }?>
-   						<?php	if ( $fields['stock']){ echo '<li><p class="strong">'.$options['stocktext'].':</p> '.$fields['stock'].'</li>';}else {  echo ''; }?>
-   						<?php	if ( $fields['vin']){ echo '<li><p class="strong">'.$options['vintext'].':</p> '.$fields['vin'].'</li>';}else {  echo ''; }?>
+<?php $video_source = get_post_meta($post->ID, 'video_meta_box_source', true);
+   $video_id = get_post_meta($post->ID, 'video_meta_box_videoid', true);               
+   if(($video_source == "vimeo") && !empty($video_id)){ ?>
+   <span class="video-tab"><?php _e('Video','language');?></span>                  
+<?php } elseif(( $video_source == "youtube") && !empty($video_id)){ ?>
+   <span class="video-tab"><?php _e('Video','language');?></span> 
+   <?php  } ?>
+   <span class="contact-tab">
+		<?php _e('Contact','language');?>
+	</span>					         										
+	<div class="item-list">	<div class="cpsAjaxLoaderResults"></div> 
+		<ul class="overview active first  quick-list-feat quick-glance">						
+							<?php	if ( $fields['price']){ echo '<li><p class="strong">'.$options['price_text'].':</p> '.$symbols['currency']; echo number_format($fields['price']).'</li>';}else {  echo ''; } ?> 						<?php	if ( $fields['miles']){ echo '<li><p class="strong">'.$options['miles_text'].':</p> '.$fields['miles'].'</li>';}else {  echo ''; }?>
+            			<?php	if ( $fields['vehicletype']){ echo '<li><p class="strong">'.$options['vehicle_type_text'].':</p> '.$fields['vehicletype'].'</li>';}else {  echo ''; }?>
+            			<?php	if ( $fields['drive']){ echo '<li><p class="strong">'.$options['drive_text'].':</p> '.$fields['drive'].'</li>';}else {  echo ''; }?>
+            			<?php	if ( $fields['transmission']){ echo '<li><p class="strong">'.$options['transmission_text'].':</p> '.$fields['transmission'].'</li>';}else {  echo ''; }?>
+            			<?php	if ( $fields['exterior']){ echo '<li><p class="strong">'.$options['exterior_text'].':</p> '.$fields['exterior'].'</li>';}else {  echo ''; }?>
+   						<?php	if ( $fields['interior']){ echo '<li><p class="strong">'.$options['interior_text'].':</p> '.$fields['interior'].'</li>';}else {  echo ''; }?>
+   						<?php	if ( $fields['epamileage']){ echo '<li><p class="strong">'.$options['epa_mileage_text'].':</p> '.$fields['epamileage'].'</li>';}else {  echo ''; }?>
+   						<?php	if ( $fields['stock']){ echo '<li><p class="strong">'.$options['stock_text'].':</p> '.$fields['stock'].'</li>';}else {  echo ''; }?>
+   						<?php	if ( $fields['vin']){ echo '<li><p class="strong">'.$options['vin_text'].':</p> '.$fields['vin'].'</li>';}else {  echo ''; }?>
    						<div style="background:none; padding:10px 3px 0px 3px!important;margin:0px auto;"><?php   if ( $fields['carfax']){ ?>  
    						<a class="carfax" target="_blank" href='http://www.carfax.com/VehicleHistory/p/Report.cfx?partner=<?php  echo $fields['carfax']; ?>&vin=<?php  echo $fields['vin']; ?>'><img style="border:1px solid #ccc" src='http://www.carfaxonline.com/media/img/subscriber/buyback.jpg' border='0'></a><?php  }else {   echo '';  }?>
    						</div><div style="clear:both"></div><div class="car-detail">  						
@@ -126,27 +128,27 @@
 									}
 									
 										?>				
-          <?php if ( $fields['drive']){ echo '<li>'.$options['drivetext'].': '.$fields['drive'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields['drive']){ echo '<li>'.$options['drive_text'].': '.$fields['drive'].'</li>';}else {  echo ''; }?>
   
-          <?php if ( $fields2['enginetype']){ echo  '<li>'.$options['enginetypetext'].': '.$fields2['enginetype'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['enginetype']){ echo  '<li>'.$options['engine_type_text'].': '.$fields2['enginetype'].'</li>';}else {  echo ''; }?>
       
-          <?php if ( $fields2['cylinders']){ echo '<li>'.$options['cylinderstext'].': '.$fields2['cylinders'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['cylinders']){ echo '<li>'.$options['cylinders_text'].': '.$fields2['cylinders'].'</li>';}else {  echo ''; }?>
        
-          <?php if ( $fields2['horsepower']){ echo '<li>'.$options['horsepowertext'].': '.$fields2['horsepower'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['horsepower']){ echo '<li>'.$options['horsepower_text'].': '.$fields2['horsepower'].'</li>';}else {  echo ''; }?>
        
-          <?php if ( $fields2['torque']){ echo '<li>'.$options['torquetext'].': '.$fields2['torque'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['torque']){ echo '<li>'.$options['torque_text'].': '.$fields2['torque'].'</li>';}else {  echo ''; }?>
        
-          <?php if ( $fields2['enginesize']){ echo '<li>'.$options['enginesizetext'].': '.$fields2['enginesize'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['enginesize']){ echo '<li>'.$options['engine_size_text'].': '.$fields2['enginesize'].'</li>';}else {  echo ''; }?>
       
-          <?php if ( $fields2['bore']){ echo '<li>'.$options['boretext'].': '.$fields2['bore'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['bore']){ echo '<li>'.$options['bore_text'].': '.$fields2['bore'].'</li>';}else {  echo ''; }?>
       
-          <?php if ( $fields2['stroke']){ echo '<li>'.$options['stroketext'].': '.$fields2['stroke'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['stroke']){ echo '<li>'.$options['stroke_text'].': '.$fields2['stroke'].'</li>';}else {  echo ''; }?>
        
-          <?php if ( $fields2['valvespercylinder']){ echo '<li>'.$options['valvespercylindertext'].': '.$fields2['valvespercylinder'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['valvespercylinder']){ echo '<li>'.$options['valves_percylinder_text'].': '.$fields2['valvespercylinder'].'</li>';}else {  echo ''; }?>
         
-          <?php if ( $fields2['fuelcapacity']){ echo '<li>'.$options['fuelcapacitytext'].': '.$fields2['fuelcapacity'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['fuelcapacity']){ echo '<li>'.$options['fuel_capacity_text'].': '.$fields2['fuelcapacity'].'</li>';}else {  echo ''; }?>
    
-          <?php if ( $fields['epamileage']){ echo '<li>'.$options['epamileagetext'].': '.$fields['epamileage'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields['epamileage']){ echo '<li>'.$options['epa_mileage_text'].': '.$fields['epamileage'].'</li>';}else {  echo ''; }?>
 
         <?php	if ( $fields['EPA_CITY_MPG']){ echo '<li>EPA City MPG: '.$fields['EPA_CITY_MPG'].'</li>';}else {  echo ''; }?>
 			<?php	if ( $fields['EPA_HIGHWAY_MPG']){ echo '<li>EPA Highway MPG: '.$fields['EPA_HIGHWAY_MPG'].'</li>';}else {  echo ''; }?>
@@ -178,25 +180,25 @@
    						   				  						   						   	<?php	if ( $fields2['MAX_CARGO_CAPACITY']){ echo '<li>Maximum Cargo Capacity Suspension: '.$fields2['MAX_CARGO_CAPACITY'].'</li>';}else {  echo ''; }?>
    						   				  						   						   	<?php	if ( $fields2['PASSENGER_AIRBAG']){ echo '<li>Passenger Airbags: '.$fields2['PASSENGER_AIRBAG'].'</li>';}else {  echo ''; }?>
    		
-          <?php if ( $fields2['wheelbase']){ echo '<li>'.$options['wheelbasetext'].':'.$fields2['wheelbase'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['wheelbase']){ echo '<li>'.$options['wheel_base_text'].':'.$fields2['wheelbase'].'</li>';}else {  echo ''; }?>
       
-          <?php if ( $fields2['overalllength']){ echo '<li>'.$options['overalllengthtext'].': '.$fields2['overalllength'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['overalllength']){ echo '<li>'.$options['overall_length_text'].': '.$fields2['overalllength'].'</li>';}else {  echo ''; }?>
       
-          <?php if ( $fields2['width']){ echo '<li>'.$options['widthtext'].': '.$fields2['width'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['width']){ echo '<li>'.$options['width_text'].': '.$fields2['width'].'</li>';}else {  echo ''; }?>
       
-          <?php if ( $fields2['height']){ echo '<li>'.$options['heighttext'].': '.$fields2['height'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['height']){ echo '<li>'.$options['height_text'].': '.$fields2['height'].'</li>';}else {  echo ''; }?>
       
-          <?php if ( $fields2['curbweight']){ echo '<li>'.$options['curbweighttext'].': v'.$fields2['curbweight'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['curbweight']){ echo '<li>'.$options['curb_weight_text'].': v'.$fields2['curbweight'].'</li>';}else {  echo ''; }?>
      
-          <?php if ( $fields2['legroom']){ echo '<li>'.$options['legroomtext'].': '.$fields2['legroom'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['legroom']){ echo '<li>'.$options['leg_room_text'].': '.$fields2['legroom'].'</li>';}else {  echo ''; }?>
       
-          <?php if ( $fields2['headroom']){ echo '<li>'.$options['headroomtext'].': '.$fields2['headroom'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['headroom']){ echo '<li>'.$options['head_room_text'].': '.$fields2['headroom'].'</li>';}else {  echo ''; }?>
      
-          <?php if ( $fields2['seatingcapacity']){ echo '<li>'.$options['seatingcapacitytext'].': '.$fields2['seatingcapacity'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['seatingcapacity']){ echo '<li>'.$options['seating_capacity_text'].': '.$fields2['seatingcapacity'].'</li>';}else {  echo ''; }?>
         
-          <?php if ( $fields2['tires']){ echo '<li>'.$options['tirestext'].': '.$fields2['tires'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields2['tires']){ echo '<li>'.$options['tires_text'].': '.$fields2['tires'].'</li>';}else {  echo ''; }?>
       
-          <?php if ( $fields['transmission']){ echo '<li>'.$options['transmissiontext'].': '.$fields['transmission'].'</li>';}else {  echo ''; }?>
+          <?php if ( $fields['transmission']){ echo '<li>'.$options['transmission_text'].': '.$fields['transmission'].'</li>';}else {  echo ''; }?>
        
                    		</ul>           																                   
 						<ul class="video">
@@ -204,9 +206,9 @@
 									$video_id = get_post_meta($post->ID, 'video_meta_box_videoid', true);	
 													
 									if(($video_source == "vimeo") && !empty($video_id)){ ?>
-									<iframe src="http://player.vimeo.com/video/<?php echo $video_id; ?>?title=0&amp;portrait=0&amp;color=e275c7" width="739" height="406" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
+									<iframe src="http://player.vimeo.com/video/<?php echo $video_id; ?>?title=0&amp;portrait=0&amp;color=e275c7" width="700" height="406" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
 									<?php } elseif(( $video_source == "youtube") && !empty($video_id)){ ?>
-									<iframe src="http://www.youtube.com/embed/<?php echo $video_id; ?>"  width="739" height="406" frameborder="0" allowfullscreen></iframe>
+									<iframe src="http://www.youtube.com/embed/<?php echo $video_id; ?>"  width="700" height="406" frameborder="0" allowfullscreen></iframe>
 									<?php  } ?>
 							</li>
 						</ul>
@@ -456,7 +458,7 @@ $error_message = '';
             <?php  endwhile; endif; ?> 
                         
 			<div class="hide-for-small">
-				<?php if ( ! dynamic_sidebar('Similar Cars')) : ?>
+				<?php if ( ! dynamic_sidebar('Featured Cars')) : ?>
 				<?php endif; ?></div>
 		<div style="clear:both; width:980px; height:1px; overflow:hidden;" class="hide-for-small"></div>
         <div style="clear:both; width:100%; height:1px; overflow:hidden;"></div>		

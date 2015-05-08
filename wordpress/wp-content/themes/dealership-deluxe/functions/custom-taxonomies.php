@@ -1,68 +1,92 @@
 <?php
-	add_action( 'init', 'create_makemodel' );	
+add_action( 'init', 'create_makemodel' );	
 function create_makemodel() 
 	{
-		$options = get_option('gorilla_fields');		
-		if(empty($options['makemodeltext']))
-		{
-		   $options['makemodeltext'] = 'Make';
-		}		
+		$options = my_get_theme_options();		
+			
 		$labels = array(
-				'name' => ucfirst($options['makemodeltext']), 'taxonomy general name' ,
-				'singular_name' =>  ucfirst($options['makemodeltext']), 'taxonomy singular name' ,
-				'search_items' =>  __('Search ','language').ucfirst($options['makemodeltext']),
-				'all_items' => __( 'All ','language').ucfirst($options['makemodeltext']),
-				'parent_item' => __( 'Parent ','language').ucfirst($options['makemodeltext']),
-				'parent_item_colon' => __( 'Parent ','language').ucfirst($options['makemodeltext']) .':' ,
-				'edit_item' => __( 'Edit ','language').ucfirst($options['makemodeltext']),
-				'update_item' => __( 'Update ','language').ucfirst($options['makemodeltext']),
-				'add_new_item' => __( 'Add New ','language').ucfirst($options['makemodeltext']),
-				'new_item_name' => __( 'New ','language').ucfirst($options['makemodeltext']) .' Name',		
+				'name' => __('Make & Model','language'), 'taxonomy general name' ,
+				'singular_name' =>  __('Make & Model','language'), 'taxonomy singular name' ,
+				'search_items' =>  __('Search Make & Model','language'),
+				'all_items' => __( 'All Make & Models','language'),
+				'parent_item' => __( 'Parent Make & Model','language'),
+				'parent_item_colon' => __( 'Parent Make & Model','language') .':' ,
+				'edit_item' => __( 'Edit Make & Model','language'),
+				'update_item' => __( 'Update Make & Model','language'),
+				'add_new_item' => __( 'Add New Make & Model','language'),
+				'new_item_name' => __( 'New Make & Model','language').' Name',		
 				);		
 		register_taxonomy(
 				'makemodel',
 				array( 'gtcd','user_listing' ),
 				array(		
 					'hierarchical' => true,
-					'label' => ucfirst($options['makemodeltext']),
+					'label' => __('Make & Model','language'),
 					'public'	   => true,
 					'can_export'   => true,
 					'labels' => $labels
 				));
-	}
-add_action( 'init', 'features' );	 
+	} 
+add_action( 'init', 'create_makemodel' );	
+function create_location() 
+	{
+		$options = my_get_theme_options();		
+		
+		$labels = array(
+				'name' => __('Location','language'), 'taxonomy general name' ,
+				'singular_name' =>  __('Location','language'), 'taxonomy singular name' ,
+				'search_items' =>  __('Search Location','language'),
+				'all_items' => __( 'All Locations','language'),
+				'parent_item' => __( 'Parent Locations','language'),
+				'parent_item_colon' => __( 'Parent Locations','language').':' ,
+				'edit_item' => __( 'Edit Locations','language'),
+				'update_item' => __( 'Update Location','language'),
+				'add_new_item' => __( 'Add New Location','language'),
+				'new_item_name' => __( 'New Location','language').' Name',		
+				);		
+		register_taxonomy(
+				'location',
+				array( 'gtcd','user_listing' ),
+				array(		
+					'hierarchical' => true,
+					'label' => __('Make & Model','language'),
+					'public'	   => true,
+					'can_export'   => true,
+					'labels' => $labels
+				));
+	} 
+add_action( 'init', 'create_location' );	
+
 function features() 
 	 {	   
-		$options = get_option('gorilla_fields');
+		$options = my_get_theme_options();
 		
-		if(empty($options['featurestext']))
-		{
-			$options['featurestext'] = 'features';
-		}		
+			
 		$labels = array(
-			'name' =>  ucfirst($options['featurestext']), 'taxonomy general name' ,
-			'singular_name' =>  ucfirst($options['featurestext']), 'taxonomy singular name',
-			'search_items' =>  __('Search ','language').ucfirst($options['featurestext']),
-			'all_items' => __( 'All ','language').ucfirst($options['featurestext']),
-			'parent_item' => __( 'Parent','language').ucfirst($options['featurestext']),
-			'parent_item_colon' => __( 'Parent ','language').ucfirst($options['featurestext']) .':' ,
-			'edit_item' => __( 'Edit ','language').ucfirst($options['featurestext'] ),
-			'update_item' => __( 'Update ','language').ucfirst($options['featurestext']),
-			'add_new_item' => __( 'Add New ','language').ucfirst($options['featurestext']),
-			'new_item_name' => __( 'New ','language').ucfirst($options['featurestext']) .' Name'
+			'name' => __('Features','language'), 'taxonomy general name' ,
+			'singular_name' =>  __('Features','language'), 'taxonomy singular name',
+			'search_items' =>  __('Search Features','language'),
+			'all_items' => __( 'All Features','language'),
+			'parent_item' => __( 'Parent Features','language'),
+			'parent_item_colon' => __( 'Parent Features','language').':' ,
+			'edit_item' => __( 'Edit Features','language'),
+			'update_item' => __( 'Update Features','language'),
+			'add_new_item' => __( 'Add New Features','language'),
+			'new_item_name' => __( 'New Features','language').' Name'
 		); 			
 		register_taxonomy(
 			'features',
 			array( 'gtcd','user_listing' ),
 			array(
 				'hierarchical' => false,
-				'label' => ucfirst($options['featurestext']),
+				'label' => __('Features','language'),
 				'public' => true,
 				'can_export' => true,
 				'show_tagcloud' => true,
 				'labels' => $labels
 			));
 	}
+		 add_action( 'init', 'features' );	 
 function custom_tag_cloud_widget($args) {
 		$args['number'] = 0; 
 		$args['largest'] = 18;

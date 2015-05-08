@@ -1,17 +1,850 @@
 <?php
 
-//Carbon Video Setup
-define('CRB_THEME_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
-add_action('after_setup_theme', 'crb_setup_theme');
+function reverse_categories($terms, $id, $taxonomy){  
+    if($taxonomy == 'location'){  
+        $terms = array_reverse($terms, false);  
+    }  
+    return $terms;  
+}  
+add_filter('get_the_terms', 'reverse_categories', 10, 3);  
+add_action( 'restrict_manage_posts', 'stock_admin_posts_filter_restrict_manage_posts' );
 
-# To override theme setup process in a child theme, add your own crb_setup_theme() to your child theme's
-# functions.php file.
-if (!function_exists('crb_setup_theme')) {
-	function crb_setup_theme() {
-		include_once(CRB_THEME_DIR . 'lib/video.php');
-	}
+function stock_admin_posts_filter_restrict_manage_posts(){
+    $type = 'post';
+    if (isset($_GET['post_type'])) {
+        $type = $_GET['post_type'];
+    }
+
+    if ('gtcd' == $type){
+
+       global $wpdb;
+    $sql = "SELECT DISTINCT meta_value FROM $wpdb->postmeta 
+        WHERE $wpdb->postmeta.meta_key = '_stock' AND meta_value != ''";
+    $fields = $wpdb->get_results($sql, ARRAY_N);        
+                ?>
+        <select name="ADMIN_FILTER_FIELD_VALUE">
+        <option value=""><?php _e('Filter By Stock Number', 'language'); ?></option>
+        <?php
+            $current_v = isset($_GET['ADMIN_FILTER_FIELD_VALUE'])? $_GET['ADMIN_FILTER_FIELD_VALUE']:'';
+            foreach ($fields as $field) {
+                printf
+                    (
+                        '<option value="%s"%s>%s</option>',
+                        $field[0],
+                $field[0] == $current? ' selected="selected"':'',
+                $field[0]
+                    );
+                }
+        ?>
+        </select>
+        <?php
+    }
 }
+add_filter( 'parse_query', 'stock_posts_filter' );
 
+function stock_posts_filter( $query ){
+    global $pagenow;
+    $type = 'post';
+    if (isset($_GET['post_type'])) {
+        $type = $_GET['post_type'];
+    }
+    if ( 'gtcd' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['ADMIN_FILTER_FIELD_VALUE']) && $_GET['ADMIN_FILTER_FIELD_VALUE'] != '') {
+        $query->query_vars['meta_key'] = '_stock';
+        $query->query_vars['meta_value'] = $_GET['ADMIN_FILTER_FIELD_VALUE'];
+    }}
+    add_action('save_post', 'save_stock_number');   
+
+    function meta_options(){
+        global $post;
+        $custom = get_post_custom($post->ID);
+        $stock_number = $custom["_stock"][0];
+        $options;$fields;$options2;$options3;$symbols;
+		$fields = get_post_meta($post->ID, 'mod1', true); ?>
+    <input  name="stock_number" value="<?php	if ( $fields['_stock']){ echo $fields['_stock'];}else {  echo ''; }?>
+" />
+<?php
+    }  
+	function save_stock_number(){
+		global $post;
+		update_post_meta($post->ID, "_stock", $_POST["_stock"]);
+	}
+function my_theme_options_init() {
+
+register_setting( 'my_options',  'my_theme_options',  'my_theme_options_validate' );
+add_settings_section( 'general', '', '__return_false', 'theme_options'  );
+add_settings_field( 'location_text', __( 'Location:', 'language' ), 'my_settings_field_location_text_input', 	'theme_options', 'general' );
+add_settings_field( 'state_text', __( 'State:', 'language' ), 'my_settings_field_state_text_input', 	'theme_options', 'general' );	
+add_settings_field( 'status_tag_text', __( 'Condition:', 'language' ), 'my_settings_field_status_tag_text_input', 	'theme_options', 'general' );
+add_settings_field( 'featured_text', __( 'Featured:', 'language' ), 'my_settings_field_featured_text_input', 	'theme_options', 'general' );
+add_settings_field( 'top_deal_text', __( 'Top Deal?:', 'language' ), 'my_settings_field_top_deal_text_input', 	'theme_options', 'general' );	
+add_settings_field( 'drive_text', __( 'Drive:', 'language' ), 'my_settings_field_drive_text_input', 'theme_options', 	'general' );	
+add_settings_field( 'epa_mileage_text', __( 'Epa Mileage:', 'language' ), 'my_settings_field_epa_mileage_text_input', 	'theme_options', 'general' );	
+add_settings_field( 'transmission_text', __( 'Transmission:', 'language' ), 	'my_settings_field_transmission_text_input', 'theme_options', 'general' );	
+add_settings_field( 'stock_text', __( 'Stock #:', 'language' ), 'my_settings_field_stock_text_input', 	'theme_options', 'general' );
+add_settings_field( 'vin_text', __( 'VIN:', 'language' ), 'my_settings_field_vin_text_input', 'theme_options', 	'general' );
+add_settings_field( 'carfax_text', __( 'Carfax Partner ID:', 'language' ), 'my_settings_field_carfax_text_input', 	'theme_options', 'general' );
+add_settings_field( 'interior_text', __( 'Interior:', 'language' ), 'my_settings_field_interior_text_input', 	'theme_options', 'general' );
+add_settings_field( 'interior_text', __( 'Interior:', 'language' ), 'my_settings_field_interior_text_input', 	'theme_options', 'general' );
+add_settings_field( 'exterior_text', __( 'Exterior:', 'language' ), 'my_settings_field_exterior_text_input', 	'theme_options', 'general' );
+add_settings_field( 'description_text', __( 'Description:', 'language' ), 'my_settings_field_description_text_input', 	'theme_options', 'general' );
+add_settings_field( 'torque_text', __( 'Torque:', 'language' ), 'my_settings_field_torque_text_input', 	'theme_options', 'general' );
+add_settings_field( 'price_text', __( 'Price:', 'language' ), 'my_settings_field_price_text_input', 'theme_options', 	'general' );	
+add_settings_field( 'vehicle_type_text', __('Vehicle Type:','language' ),'my_settings_field_vehicle_type_text_input', 'theme_options', 'general' );					
+add_settings_field( 'miles_text', __( 'Miles:', 'language' ), 'my_settings_field_miles_text_input', 'theme_options', 	'general' );	
+add_settings_field( 'year_text', __( 'Year:', 'language' ), 'my_settings_field_year_text_input', 'theme_options', 	'general' );
+add_settings_field( 'make_model_text', __( 'Make & Model:', 'language' ), 'my_settings_field_make_model_text_input', 'theme_options', 	'general' );
+add_settings_field( 'features_text', __( 'Features:', 'language' ), 'my_settings_field_features_text_input', 'theme_options', 	'general' );
+add_settings_field( 'engine_size_text', __( 'Engine Size:', 'language' ), 'my_settings_field_engine_size_text_input', 'theme_options', 	'general' );
+add_settings_field( 'numbers_cylinders_text', __( 'Number of Cylinders:', 'language' ), 'my_settings_field_number_cylinders_text_input', 'theme_options', 	'general' );
+add_settings_field( 'horsepower_text', __( 'Horsepower:', 'language' ), 'my_settings_field_horsepower_text_input', 'theme_options', 	'general' );
+add_settings_field( 'compression_ratio_text', __( 'Compression Ratio:', 'language' ), 'my_settings_field_compression_ratio_text_input', 'theme_options', 	'general' );
+add_settings_field( 'camshaft_text', __( 'Camshaft:', 'language' ), 'my_settings_field_camshaft_text_input', 'theme_options', 	'general' );
+add_settings_field( 'engine_type_text', __( 'Engine Tye:', 'language' ), 'my_settings_field_engine_type_text_input', 'theme_options', 	'general' );
+add_settings_field( 'bore_text', __( 'Bore:', 'language' ), 'my_settings_field_bore_text_input', 'theme_options', 	'general' );
+add_settings_field( 'stroke_text', __( 'Stroke:', 'language' ), 'my_settings_field_stroke_text_input', 'theme_options', 	'general' );
+add_settings_field( 'valves_text', __( 'Valves per Cylinder:', 'language' ), 'my_settings_field_valves_text_input', 'theme_options', 	'general' );
+add_settings_field( 'fuel_capacity_text', __( 'Fuel Capacity:', 'language' ), 'my_settings_field_fuel_text_input', 'theme_options', 	'general' );
+add_settings_field( 'wheelbase_text', __( 'Wheelbase:', 'language' ), 'my_settings_field_wheelbase_text_input', 'theme_options', 	'general' );
+add_settings_field( 'overall_length_text', __( 'Overall Length:', 'language' ), 'my_settings_field_overall_length_text_input', 'theme_options', 	'general' );
+add_settings_field( 'width_text', __( 'Width:', 'language' ), 'my_settings_field_width_text_input', 'theme_options', 	'general' );
+add_settings_field( 'height_text', __( 'Height:', 'language' ), 'my_settings_field_height_text_input', 'theme_options', 	'general' );
+add_settings_field( 'curb_weight_text', __( 'Curb Weight:', 'language' ), 'my_settings_field_curb_weight_text_input', 'theme_options', 	'general' );
+add_settings_field( 'leg_room_text', __( 'Leg Room:', 'language' ), 'my_settings_field_leg_room_text_input', 'theme_options', 	'general' );
+add_settings_field( 'head_room_text', __( 'Head Room:', 'language' ), 'my_settings_field_head_room_text_input', 'theme_options', 	'general' );
+add_settings_field( 'seating_text', __( 'Seating Capacity (Std):', 'language' ), 'my_settings_field_seating_text_input', 'theme_options', 	'general' );
+add_settings_field( 'tires_text', __( 'Tires (Std):', 'language' ), 'my_settings_field_tires_text_input', 'theme_options', 	'general' );
+
+}
+add_action( 'admin_init', 'my_theme_options_init' );
+ 
+function my_option_page_capability( $capability ) {
+	return 'edit_theme_options';
+}
+add_filter( 'option_page_capability_my_options', 'my_option_page_capability' );
+
+function my_theme_options_add_page() {
+	$theme_page = add_theme_page(
+		__( 'Search Fields', 'language' ),  
+		__( 'Search Fields', 'language' ),   
+		'edit_theme_options',         
+		'theme_options',               
+		'my_theme_options_render_page' 
+	);
+}
+add_action( 'admin_menu', 'my_theme_options_add_page' );
+ 
+function my_get_theme_options() {
+	$saved = (array) get_option( 'my_theme_options' );
+	$defaults = array(
+		'price_hide'       => 'off',
+		'condition_hide'       => 'off',
+		'location_hide'       => 'off', 
+		'vehicle_type_hide'       => 'off', 
+		'year_hide'       => 'off',
+		'state_hide'       => 'off',
+		'make_hide'       => 'off',
+		'state_text'	=> __('State','language'), 
+		'location_text'	=> __('Location','language'),
+		'price_text'     => __('Price','language'),
+		'status_tag_text'     => __('Condition','language'),
+		'top_deal_text'     => __('Top Deal','language'),
+		'featured_text'     => __('Featured','language'),
+		'epa_mileage_text'     => __('EPA Mileage','language'),
+		'stock_text'     => __('Stock','language'),
+		'vin_text'     => __('VIN','language'),
+		'carfax_text'     => __('Carfax Parner ID','language'),
+		'interior_text'     => __('Interior','language'),
+		'exterior_text'     => __('Exterior','language'),
+		'drive_text'     => __('Drive','language'),
+		'description_text'     	=> __('Description','language'),
+		'torque_text'     	=> __('Torque','language'),
+		'year_text'     	=> __('Year','language'),
+		'miles_text'     	=> __('Miles','language'),
+		'make_model_text'     	=> __('Make & Model','language'),
+		'features_text'     	=> __('Features','language'),
+		'year_start_text'     	=> __('1990','language'),
+		'year_end_text'     	=> __('2016','language'),
+		'engine_size_text'     	=> __('Engine Size','language'),
+		'number_cylinders_text'     	=> __('Number of Cylinders','language'),
+		'horsepower_text'     	=> __('Horsepower','language'),
+		'compression_ratio_text'     	=> __('Compression Ratio','language'),
+		'camshaft_text'     	=> __('Camshaft','language'),
+		'engine_type_text'     	=> __('Engine Type','language'),
+		'bore_text'     	=> __('Bore','language'),
+		'stroke_text'     	=> __('Stroke','language'),
+		'valves_text'     	=> __('Valves','language'),
+		'fuel_capacity_text'     	=> __('Fuel Capacity','language'),
+		'wheelbase_text'     	=> __('Wheelbase','language'),
+		'overall_length_text'     	=> __('Overall Length','language'),
+		'width_text'     	=> __('Width','language'),
+		'height_text'     	=> __('Height','language'),
+		'curb_weight_text'     	=> __('Curb Weight','language'),
+		'leg_room_text'     	=> __('Leg Room','language'),
+		'head_room_text'     	=> __('Head Room','language'),
+		'seating_text'     	=> __('Seating Capacity (Std)','language'),
+		'tires_text'     	=> __('Tires (Std)','language'),
+		'transmission_text'     	=> __('Transmission','language'),
+		'transmission_1'     	=> __('Automatic','language'),
+		'transmission_2'     	=> __('Manual','language'),
+		'transmission_3'     	=> __('Semi-Auto','language'),
+		'transmission_4'     	=> __('Other','language'),
+		'vehicle_type_text'     	=> __('Vehicle Type','language'),
+		'vehicle_type_1'     	=> __('Convertibles','language'),
+		'vehicle_type_2'     	=> __('Crossovers','language'),
+		'vehicle_type_3'     	=> __('Luxury Vehicles','language'),
+		'vehicle_type_4'     	=> __('Hybrids','language'),
+		'vehicle_type_5'     	=> __('Minivans and Vans','language'),
+		'vehicle_type_6'     	=> __('Pickup Trucks','language'),
+		'vehicle_type_7'     	=> __('Sedans and Coupes','language'),
+		'vehicle_type_8'     	=> __('Diesel Engines','language'),
+		'vehicle_type_9'     	=> __('Sport Utilities','language'),
+		'vehicle_type_10'     	=> __('Sports Cars','language'),
+		'vehicle_type_11'     	=> __('Wagons','language'),
+		'vehicle_type_12'     	=> __('4WD-AWD','language'),
+	);
+ 
+	$defaults = apply_filters( 'my_default_theme_options', $defaults );
+	$options = wp_parse_args( $saved, $defaults );
+	$options = array_intersect_key( $options, $defaults );
+ 
+	return $options;
+}
+ 
+function my_settings_field_year_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[year_text]" id="year-text-input" value="<?php echo esc_attr( $options['year_text'] ); ?>" /><label for="checkbox">
+		<input type="checkbox" name="my_theme_options[year_hide]" id="checkbox" <?php checked( 'on', $options['year_hide'] ); ?> />
+		<?php _e( ' Hide in Search Module.', 'language' ); ?>
+	</label>
+	<div style="padding:5px 0;"></div>
+	<li class='li'><strong><?php _e('Start Date:','language');?></strong>&nbsp;<input type="text" name="my_theme_options[year_start_text]" id="year-text-input" value="<?php echo esc_attr( $options['year_start_text'] ); ?>" />
+<li class='lialt'>&nbsp;&nbsp;&nbsp;<strong><?php _e('End Date:','language');?></strong>&nbsp;<input type="text" name="my_theme_options[year_end_text]" id="year-text-input" value="<?php echo esc_attr( $options['year_end_text'] ); ?>" /></li>
+	
+	<?php
+}
+function my_settings_field_make_model_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[make_model_text]" id="make_model-text-input" value="<?php echo esc_attr( $options['make_model_text'] ); ?>" />
+		<label for="checkbox">
+		<input type="checkbox" name="my_theme_options[make_hide]" id="checkbox" <?php checked( 'on', $options['make_hide'] ); ?> />
+		<?php _e( ' Hide in Search Module.', 'language' ); ?>
+	</label>
+
+	<?php
+}
+function my_settings_field_make_hide() {
+	$options = my_get_theme_options();
+	?>
+	<?php
+}
+function my_settings_field_condition_hide() {
+	$options = my_get_theme_options();
+	?>
+	<?php
+}
+function my_settings_field_state_hide() {
+	$options = my_get_theme_options();
+	?>
+	<?php
+}
+function my_settings_field_price_hide() {
+	$options = my_get_theme_options();
+	?>
+	<?php
+}
+function my_settings_field_year_hide() {
+	$options = my_get_theme_options();
+	?>
+	<?php
+}
+function my_settings_field_vehicle_type_hide() {
+	$options = my_get_theme_options();
+	?>
+	<?php
+}
+function my_settings_field_location_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[location_text]" id="location-text-input" value="<?php echo esc_attr( $options['location_text'] ); ?>" />	
+	<?php	
+}
+function my_settings_field_state_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[state_text]" id="state-text-input" value="<?php echo esc_attr( $options['state_text'] ); ?>" />	<label for="checkbox">
+		<input type="checkbox" name="my_theme_options[state_hide]" id="checkbox" <?php checked( 'on', $options['state_hide'] ); ?> />
+		<?php _e( ' Hide in Search Module.', 'language' ); ?>
+	</label>
+	<?php	
+}
+function my_settings_field_price_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[price_text]" id="price-text-input" value="<?php echo esc_attr( $options['price_text'] ); ?>" />	<label for="checkbox">
+		<input type="checkbox" name="my_theme_options[price_hide]" id="checkbox" <?php checked( 'on', $options['price_hide'] ); ?> />
+		<?php _e( ' Hide in Search Module.', 'language' ); ?>
+	</label>
+
+	<?php	
+}
+function my_settings_field_featured_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[featured_text]" id="featured-text-input" value="<?php echo esc_attr( $options['featured_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_top_deal_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[top_deal_text]" id="top_deal-text-input" value="<?php echo esc_attr( $options['top_deal_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_status_tag_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[status_tag_text]" id="statustag_text-text-input" value="<?php echo esc_attr( $options['status_tag_text'] ); ?>" />
+	<label for="checkbox">
+		<input type="checkbox" name="my_theme_options[condition_hide]" id="checkbox" <?php checked( 'on', $options['condition_hide'] ); ?> />
+		<?php _e( ' Hide in Search Module.', 'language' ); ?>
+	</label>
+	<?php
+}
+function my_settings_field_drive_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[drive_text]" id="drive-text-input" value="<?php echo esc_attr( $options['drive_text'] ); ?>" />
+	<?php
+}
+function my_settings_field_epa_mileage_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[epa_mileage_text]" id="epa_mileage-text-input" value="<?php echo esc_attr( $options['epa_mileage_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_stock_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[stock_text]" id="stock-text-input" value="<?php echo esc_attr( $options['stock_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_vin_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[vin_text]" id="vin-text-input" value="<?php echo esc_attr( $options['vin_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_carfax_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[carfax_text]" id="carfax-text-input" value="<?php echo esc_attr( $options['carfax_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_interior_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[interior_text]" id="interior-text-input" value="<?php echo esc_attr( $options['interior_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_exterior_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[exterior_text]" id="exterior-text-input" value="<?php echo esc_attr( $options['exterior_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_torque_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[torque_text]" id="torque-text-input" value="<?php echo esc_attr( $options['torque_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_miles_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[miles_text]" id="miles-text-input" value="<?php echo esc_attr( $options['miles_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_features_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[features_text]" id="features-text-input" value="<?php echo esc_attr( $options['features_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_engine_size_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[engine_size_text]" id="engine_size-text-input" value="<?php echo esc_attr( $options['engine_size_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_number_cylinders_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[number_cylinders_text]" id="number_cylinders-text-input" value="<?php echo esc_attr( $options['number_cylinders_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_horsepower_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[horsepower_text]" id="horsepower-text-input" value="<?php echo esc_attr( $options['horsepower_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_compression_ratio_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[compression_ratio_text]" id="compression_ratio-text-input" value="<?php echo esc_attr( $options['compression_ratio_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_camshaft_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[camshaft_text]" id="camshaft-text-input" value="<?php echo esc_attr( $options['camshaft_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_engine_type_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[engine_type_text]" id="engine_type-text-input" value="<?php echo esc_attr( $options['engine_type_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_bore_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[bore_text]" id="bore-text-input" value="<?php echo esc_attr( $options['bore_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_stroke_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[stroke_text]" id="stroke-text-input" value="<?php echo esc_attr( $options['stroke_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_valves_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[valves_text]" id="valves-text-input" value="<?php echo esc_attr( $options['valves_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_fuel_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[fuel_capacity_text]" id="fuel_capacity-text-input" value="<?php echo esc_attr( $options['fuel_capacity_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_wheelbase_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[wheelbase_text]" id="wheelbase-text-input" value="<?php echo esc_attr( $options['wheelbase_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_overall_length_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[overall_length_text]" id="overall_length-text-input" value="<?php echo esc_attr( $options['overall_length_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_width_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[width_text]" id="width-text-input" value="<?php echo esc_attr( $options['width_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_height_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[height_text]" id="height-text-input" value="<?php echo esc_attr( $options['height_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_curb_weight_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[curb_weight_text]" id="curb_weight-text-input" value="<?php echo esc_attr( $options['curb_weight_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_leg_room_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[leg_room_text]" id="leg_room-text-input" value="<?php echo esc_attr( $options['leg_room_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_head_room_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[head_room_text]" id="head_room-text-input" value="<?php echo esc_attr( $options['head_room_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_seating_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[seating_text]" id="seating-text-input" value="<?php echo esc_attr( $options['seating_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_tires_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[tires_text]" id="tires-text-input" value="<?php echo esc_attr( $options['tires_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_description_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[description_text]" id="description-text-input" value="<?php echo esc_attr( $options['description_text'] ); ?>" />
+
+	<?php
+}
+function my_settings_field_vehicle_type_text_input() {
+	$options = my_get_theme_options();
+	?>
+	
+
+<input type="text" name="my_theme_options[vehicle_type_text]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_text'] ); ?>" /><label for="checkbox">
+		<input type="checkbox" name="my_theme_options[vehicle_type_hide]" id="checkbox" <?php checked( 'on', $options['vehicle_type_hide'] ); ?> />
+		<?php _e( ' Hide in Search Module.', 'language' ); ?>
+	</label>
+	<div style="padding:5px 0;"></div>
+	<li class='li'><strong><?php _e('Option 1:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_1]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_1'] ); ?>" /></li>	
+	<li class='lialt'><strong><?php _e('Option 2:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_2]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_2'] ); ?>" /></li>	
+	<li class='li'><strong><?php _e('Option 3:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_3]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_3'] ); ?>" /></li>	
+	<li class='lialt'><strong><?php _e('Option 4:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_4]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_4'] ); ?>" /></li>
+	<li class='li'><strong><?php _e('Option 5:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_5]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_5'] ); ?>" /></li>	
+	<li class='lialt'><strong><?php _e('Option 6:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_6]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_6'] ); ?>" /></li>	
+	<li class='li'><strong><?php _e('Option 7:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_7]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_7'] ); ?>" /></li>	
+	<li class='lialt'><strong><?php _e('Option 8:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_8]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_8'] ); ?>" /></li>	
+	<li class='li'><strong><?php _e('Option 9:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_9]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_9'] ); ?>" /></li>	
+	<li class='lialt'><strong><?php _e('Option 10:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_10]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_10'] ); ?>" /></li>	
+	<li class='li'><strong><?php _e('Option 11:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_11]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_11'] ); ?>" /></li>
+	<li class='lialt'><strong><?php _e('Option 12:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[vehicle_type_12]" id="vehicle_type-text-input" value="<?php echo esc_attr( $options['vehicle_type_12'] ); ?>" /></li>	
+	<?php
+}
+function my_settings_field_transmission_text_input() {
+	$options = my_get_theme_options();
+	?>	
+	<input type="text" name="my_theme_options[transmission_text]" id="transmission-text-input" value="<?php echo esc_attr( $options['transmission_text'] ); ?>" />
+		<div style="padding:5px 0;"></div>
+	<li class='li'><strong><?php _e('Option 1:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[transmission_1]" id="transmission-text-input" value="<?php echo esc_attr( $options['transmission_1'] ); ?>" /></li>
+	<li class='lialt'><strong><?php _e('Option 2:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[transmission_2]" id="transmission-text-input" value="<?php echo esc_attr( $options['transmission_2'] ); ?>" /></li>
+	<li class='li'><strong><?php _e('Option 3:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[transmission_3]" id="transmission-text-input" value="<?php echo esc_attr( $options['transmission_3'] ); ?>" /></li>
+	<li class='lialt'><strong><?php _e('Option 4:','language');?></strong>&nbsp;&nbsp;<input type="text" name="my_theme_options[transmission_4]" id="transmission-text-input" value="<?php echo esc_attr( $options['transmission_4'] ); ?>" /></li>	
+	<?php
+}
+function my_theme_options_render_page() {
+	?>
+		<div id="theme-options-wrap" class="widefat">    
+    <div id="icon-themes" class="icon32"><br /></div> 
+		<?php screen_icon(); ?>
+		<?php $theme_name = function_exists( 'wp_get_theme' ) ? wp_get_theme() : get_current_theme(); ?>
+		<h2><?php printf( __( '%s Theme Options', 'language' ), $theme_name ); ?></h2>
+		<?php settings_errors(); ?>
+ 
+		<form method="post" action="options.php">
+			
+			<div class="tabber_container">
+			<div class="block">			
+				<?php settings_fields( 'my_options' );
+				do_settings_sections( 'theme_options' ); ?>		</div>
+			</div>			
+				<?php submit_button();
+			?>
+		</form>
+	</div>
+	<?php
+}
+function my_theme_options_validate( $input ) {
+	$output = array();
+
+		if ( isset( $input['price_hide'] ) )
+		$output['price_hide'] = 'on';	
+		if ( isset( $input['year_hide'] ) )
+		$output['year_hide'] = 'on';
+		if ( isset( $input['vehicle_type_hide'] ) )
+		$output['vehicle_type_hide'] = 'on';		
+		if ( isset( $input['state_hide'] ) )
+		$output['state_hide'] = 'on';		
+		if ( isset( $input['make_hide'] ) )
+		$output['make_hide'] = 'on';		
+		if ( isset( $input['condition_hide'] ) )
+		$output['condition_hide'] = 'on';
+		if ( isset( $input['featured_text'] ) && ! empty( $input['featured_text'] ) )
+		$output['featured_text'] = wp_filter_nohtml_kses( $input['featured_text'] );		
+		if ( isset( $input['make_model_text'] ) && ! empty( $input['make_model_text'] ) )
+		$output['make_model_text'] = wp_filter_nohtml_kses( $input['make_model_text'] );		
+		if ( isset( $input['location_text'] ) && ! empty( $input['location_text'] ) )
+		$output['location_text'] = wp_filter_nohtml_kses( $input['location_text'] );	
+		if ( isset( $input['state_text'] ) && ! empty( $input['state_text'] ) )
+		$output['state_text'] = wp_filter_nohtml_kses( $input['state_text'] );	
+		if ( isset( $input['price_text'] ) && ! empty( $input['price_text'] ) )
+		$output['price_text'] = wp_filter_nohtml_kses( $input['price_text'] );	
+		if ( isset( $input['top_deal_text'] ) && ! empty( $input['top_deal_text'] ) )
+		$output['top_deal_text'] = wp_filter_nohtml_kses( $input['top_deal_text'] );	
+		if ( isset( $input['epa_mileage_text'] ) && ! empty( $input['epa_mileage_text'] ) )
+		$output['epa_mileage_text'] = wp_filter_nohtml_kses( $input['epa_mileage_text'] );
+		if ( isset( $input['stock_text'] ) && ! empty( $input['stock_text'] ) )
+		$output['stock_text'] = wp_filter_nohtml_kses( $input['stock_text'] );
+		 if ( isset( $input['vin_text'] ) && ! empty( $input['vin_text'] ) )
+		$output['vin_text'] = wp_filter_nohtml_kses( $input['vin_text'] );
+		if ( isset( $input['carfax_text'] ) && ! empty( $input['carfax_text'] ) )
+		$output['carfax_text'] = wp_filter_nohtml_kses( $input['carfax_text'] );
+		if ( isset( $input['interior_text'] ) && ! empty( $input['interior_text'] ) )
+		$output['interior_text'] = wp_filter_nohtml_kses( $input['interior_text'] );
+		if ( isset( $input['exterior_text'] ) && ! empty( $input['exterior_text'] ) )
+		$output['exterior_text'] = wp_filter_nohtml_kses( $input['exterior_text'] );
+		if ( isset( $input['drive_text'] ) && ! empty( $input['drive_text'] ) )
+		$output['drive_text'] = wp_filter_nohtml_kses( $input['drive_text'] );
+		if ( isset( $input['description_text'] ) && ! empty( $input['description_text'] ) )
+		$output['description_text'] = wp_filter_nohtml_kses( $input['description_text'] );
+		if ( isset( $input['torque_text'] ) && ! empty( $input['torque_text'] ) )
+		$output['torque_text'] = wp_filter_nohtml_kses( $input['torque_text'] );
+		if ( isset( $input['year_text'] ) && ! empty( $input['year_text'] ) )
+		$output['year_text'] = wp_filter_nohtml_kses( $input['year_text'] );
+		if ( isset( $input['miles_text'] ) && ! empty( $input['miles_text'] ) )
+		$output['miles_text'] = wp_filter_nohtml_kses( $input['miles_text'] );
+		if ( isset( $input['make_model_text'] ) && ! empty( $input['make_model_text'] ) )
+		$output['make_model_text'] = wp_filter_nohtml_kses( $input['make_model_text'] );
+		if ( isset( $input['features_text'] ) && ! empty( $input['features_text'] ) )
+		$output['features_text'] = wp_filter_nohtml_kses( $input['features_text'] );
+		if ( isset( $input['year_start_text'] ) && ! empty( $input['year_start_text'] ) )
+		$output['year_start_text'] = wp_filter_nohtml_kses( $input['year_start_text'] );
+		if ( isset( $input['year_end_text'] ) && ! empty( $input['year_end_text'] ) )
+		$output['year_end_text'] = wp_filter_nohtml_kses( $input['year_end_text'] );
+		if ( isset( $input['engine_size_text'] ) && ! empty( $input['engine_size_text'] ) )
+		$output['engine_size_text'] = wp_filter_nohtml_kses( $input['engine_size_text'] );
+		if ( isset( $input['number_cylinders_text'] ) && ! empty( $input['number_cylinders_text'] ) )
+		$output['number_cylinders_text'] = wp_filter_nohtml_kses( $input['number_cylinders_text'] );
+		if ( isset( $input['horsepower_text'] ) && ! empty( $input['horsepower_text'] ) )
+		$output['horsepower_text'] = wp_filter_nohtml_kses( $input['horsepower_text'] );
+		if ( isset( $input['compression_ratio_text'] ) && ! empty( $input['compression_ratio_text'] ) )
+		$output['compression_ratio_text'] = wp_filter_nohtml_kses( $input['compression_ratio_text'] );
+		if ( isset( $input['camshaft_text'] ) && ! empty( $input['camshaft_text'] ) )
+		$output['camshaft_text'] = wp_filter_nohtml_kses( $input['camshaft_text'] );
+		if ( isset( $input['engine_type_text'] ) && ! empty( $input['engine_type_text'] ) )
+		$output['engine_type_text'] = wp_filter_nohtml_kses( $input['engine_type_text'] );
+		if ( isset( $input['bore_text'] ) && ! empty( $input['bore_text'] ) )
+		$output['bore_text'] = wp_filter_nohtml_kses( $input['bore_text'] );
+		if ( isset( $input['stroke_text'] ) && ! empty( $input['stroke_text'] ) )
+		$output['stroke_text'] = wp_filter_nohtml_kses( $input['stroke_text'] );
+		if ( isset( $input['valves_text'] ) && ! empty( $input['valves_text'] ) )
+		$output['valves_text'] = wp_filter_nohtml_kses( $input['valves_text'] );
+		if ( isset( $input['fuel_capacity_text'] ) && ! empty( $input['fuel_capacity_text'] ) )
+		$output['fuel_capacity_text'] = wp_filter_nohtml_kses( $input['fuel_capacity_text'] );
+		if ( isset( $input['wheelbase_text'] ) && ! empty( $input['wheelbase_text'] ) )
+		$output['wheelbase_text'] = wp_filter_nohtml_kses( $input['wheelbase_text'] );
+		if ( isset( $input['overall_length_text'] ) && ! empty( $input['overall_length_text'] ) )
+		$output['overall_length_text'] = wp_filter_nohtml_kses( $input['overall_length_text'] );
+		if ( isset( $input['width_text'] ) && ! empty( $input['width_text'] ) )
+		$output['width_text'] = wp_filter_nohtml_kses( $input['width_text'] );
+		if ( isset( $input['height_text'] ) && ! empty( $input['height_text'] ) )
+		$output['height_text'] = wp_filter_nohtml_kses( $input['height_text'] );
+		if ( isset( $input['curb_weight_text'] ) && ! empty( $input['curb_weight_text'] ) )
+		$output['curb_weight_text'] = wp_filter_nohtml_kses( $input['curb_weight_text'] );
+		if ( isset( $input['leg_room_text'] ) && ! empty( $input['leg_room_text'] ) )
+		$output['leg_room_text'] = wp_filter_nohtml_kses( $input['leg_room_text'] );
+		if ( isset( $input['head_room_text'] ) && ! empty( $input['head_room_text'] ) )
+		$output['head_room_text'] = wp_filter_nohtml_kses( $input['head_room_text'] );
+		if ( isset( $input['seating_text'] ) && ! empty( $input['seating_text'] ) )
+		$output['seating_text'] = wp_filter_nohtml_kses( $input['seating_text'] );
+		if ( isset( $input['tires_text'] ) && ! empty( $input['tires_text'] ) )
+		$output['tires_text'] = wp_filter_nohtml_kses( $input['tires_text'] );
+		if ( isset( $input['transmission_text'] ) && ! empty( $input['transmission_text'] ) )
+		$output['transmission_text'] = wp_filter_nohtml_kses( $input['transmission_text'] );
+		if ( isset( $input['transmission_1'] ) && ! empty( $input['transmission_1'] ) )
+		$output['transmission_1'] = wp_filter_nohtml_kses( $input['transmission_1'] );
+		if ( isset( $input['transmission_2'] ) && ! empty( $input['transmission_2'] ) )
+		$output['property_status_2'] = wp_filter_nohtml_kses( $input['transmission_2'] );
+		if ( isset( $input['transmission_3'] ) && ! empty( $input['transmission_3'] ) )
+		$output['transmission_3'] = wp_filter_nohtml_kses( $input['transmission_3'] );
+		if ( isset( $input['transmission_4'] ) && ! empty( $input['transmission_4'] ) )
+		$output['transmission_4'] = wp_filter_nohtml_kses( $input['transmission_4'] );
+		if ( isset( $input['vehicle_type_text'] ) && ! empty( $input['vehicle_type_text'] ) )
+		$output['vehicle_type_text'] = wp_filter_nohtml_kses( $input['vehicle_type_text'] );
+		if ( isset( $input['vehicle_type_1'] ) && ! empty( $input['vehicle_type_1'] ) )
+		$output['vehicle_type_1'] = wp_filter_nohtml_kses( $input['vehicle_type_1'] );
+		if ( isset( $input['vehicle_type_2'] ) && ! empty( $input['vehicle_type_2'] ) )
+		$output['vehicle_type_2'] = wp_filter_nohtml_kses( $input['vehicle_type_2'] );
+		if ( isset( $input['vehicle_type_3'] ) && ! empty( $input['vehicle_type_3'] ) )
+		$output['vehicle_type_3'] = wp_filter_nohtml_kses( $input['vehicle_type_3'] );
+		if ( isset( $input['vehicle_type_4'] ) && ! empty( $input['vehicle_type_4'] ) )
+		$output['vehicle_type_4'] = wp_filter_nohtml_kses( $input['vehicle_type_4'] );
+		if ( isset( $input['vehicle_type_5'] ) && ! empty( $input['vehicle_type_5'] ) )
+		$output['vehicle_type_5'] = wp_filter_nohtml_kses( $input['vehicle_type_5'] );
+		if ( isset( $input['vehicle_type_5'] ) && ! empty( $input['vehicle_type_5'] ) )
+		$output['vehicle_type_5'] = wp_filter_nohtml_kses( $input['vehicle_type_5'] );
+		if ( isset( $input['vehicle_type_6'] ) && ! empty( $input['vehicle_type_6'] ) )
+		$output['vehicle_type_6'] = wp_filter_nohtml_kses( $input['vehicle_type_6'] );
+		if ( isset( $input['vehicle_type_7'] ) && ! empty( $input['vehicle_type_7'] ) )
+		$output['vehicle_type_7'] = wp_filter_nohtml_kses( $input['vehicle_type_7'] );
+		if ( isset( $input['vehicle_type_8'] ) && ! empty( $input['vehicle_type_8'] ) )
+		$output['vehicle_type_8'] = wp_filter_nohtml_kses( $input['vehicle_type_8'] );
+		if ( isset( $input['vehicle_type_9'] ) && ! empty( $input['vehicle_type_9'] ) )
+		$output['vehicle_type_9'] = wp_filter_nohtml_kses( $input['vehicle_type_9'] );
+		if ( isset( $input['vehicle_type_10'] ) && ! empty( $input['vehicle_type_10'] ) )
+		$output['vehicle_type_10'] = wp_filter_nohtml_kses( $input['vehicle_type_10'] );
+		if ( isset( $input['vehicle_type_11'] ) && ! empty( $input['vehicle_type_11'] ) )
+		$output['vehicle_type_11'] = wp_filter_nohtml_kses( $input['vehicle_type_11'] );
+		if ( isset( $input['vehicle_type_12'] ) && ! empty( $input['vehicle_type_12'] ) )
+		$output['vehicle_type_12'] = wp_filter_nohtml_kses( $input['vehicle_type_12'] );
+	return apply_filters( 'my_theme_options_validate', $output, $input );
+}
+function my_form_options_init() {
+register_setting( 'form_options',  'my_form_options',  'my_form_options_validate' );
+add_settings_section( 'general', '', '__return_false', 'form_options'  );
+add_settings_field( 'paypal_intro', __( 'PayPal Intro Message:', 'language' ), 'my_settings_field_paypal_intro_text_input', 	'form_options', 'general' );
+add_settings_field( 'paypal_email', __( 'PayPal E-mail Account:', 'language' ), 'my_settings_field_paypal_email_text_input', 	'form_options', 'general' );
+add_settings_field( 'paypal_fee', __( 'Listing Price:', 'language' ), 'my_settings_field_paypal_fee_text_input', 	'form_options', 'general' );
+add_settings_field( 'redirection_page', __( 'Redirection Page:', 'language' ), 'my_settings_field_paypal_redirection_text_input', 	'form_options', 'general' );
+add_settings_field( 'success_text', __( 'Success Message:', 'language' ), 'my_settings_field_success_text_input', 	'form_options', 'general' );
+add_settings_field( 'wait_text', __( 'Please Wait Message:', 'language' ), 'my_settings_field_wait_text_input', 	'form_options', 'general' );
+add_settings_field( 'user_exists', __( 'User Already Exists Message:', 'language' ), 'my_settings_field_user_exists_text_input', 	'form_options', 'general' );
+}
+add_action( 'admin_init', 'my_form_options_init' );
+function my_form_page_capability( $capability ) {
+	return 'edit_theme_options';
+}
+add_filter( 'option_page_capability_my_options', 'my_form_page_capability' );
+
+function my_form_options_add_page() {
+	$theme_page = add_theme_page(
+		__( 'Form Setup', 'language' ),  
+		__( 'Form Setup', 'language' ),   
+		'edit_theme_options',         
+		'form_options',               
+		'my_form_options_render_page' 
+	);
+}
+add_action( 'admin_menu', 'my_form_options_add_page' );
+function my_get_form_options() {
+	$saved = (array) get_option( 'my_form_options' );
+	$defaults = array(
+	'paypal_intro'	=> __('Please use the button below to complete your payment.','language'),	
+	'paypal_email'	=> __('sales@gorillathemes.com','language'),	
+	'paypal_fee'	=> __('0.99','language'),	
+	'redirection_page'	=> __('http://www.gorillathemes.com','language'),	
+	'success_text'	=> __('Thank you for your submission!','language'),	
+	'wait_text'	=> __('Saving... please be patient!','language'),	
+	'user_exists'	=> __('This email address is already in use. If you already have an account please log in.','language'),	
+	);
+ 
+	$defaults = apply_filters( 'my_default_form_options', $defaults );
+	$options = wp_parse_args( $saved, $defaults );
+	$options = array_intersect_key( $options, $defaults );
+ 
+	return $options;
+} 
+function my_settings_field_paypal_email_text_input() {
+	$options = my_get_form_options();
+?>
+	<input type="text" name="my_form_options[paypal_email]" id="paypal_email-text-input" value="<?php echo esc_attr( $options['paypal_email'] ); ?>" />	
+<?php
+}
+function my_settings_field_paypal_intro_text_input() {
+	$options = my_get_form_options();
+	?>
+	<input type="text" name="my_form_options[paypal_intro]" id="paypal_intro-text-input" value="<?php echo esc_attr( $options['paypal_intro'] ); ?>" />	
+<?php
+}	
+function my_settings_field_paypal_fee_text_input() {
+	$options = my_get_form_options();
+?>
+	<input type="text" name="my_form_options[paypal_fee]" id="paypal_fee-text-input" value="<?php echo esc_attr( $options['paypal_fee'] ); ?>" />	
+	<?php	
+}	
+function my_settings_field_paypal_redirection_text_input() {
+	$options = my_get_form_options();
+?>
+	<input type="text" name="my_form_options[redirection_page]" id="redirection_page-text-input" value="<?php echo esc_attr( $options['redirection_page'] ); ?>" />
+<?php	
+}	
+function my_settings_field_success_text_input() {
+	$options = my_get_form_options();
+?>	
+	<input type="text" name="my_form_options[success_text]" id="success_text-text-input" value="<?php echo esc_attr( $options['success_text'] ); ?>" />
+<?php	
+}	
+function my_settings_field_wait_text_input() {
+	$options = my_get_form_options();
+?>	
+	<input type="text" name="my_form_options[wait_text]" id="wait_text-text-input" value="<?php echo esc_attr( $options['wait_text'] ); ?>" />	
+<?php	
+}
+function my_settings_field_user_exists_text_input() {
+	$options = my_get_form_options();
+?>	
+	<input type="text" name="my_form_options[user_exists]" id="user_exists-text-input" value="<?php echo esc_attr( $options['user_exists'] ); ?>" />	
+<?php	
+}
+function my_settings_field_thank_you_message_text_input() {
+	$options = my_get_form_options();
+?>	
+	<input type="text" name="my_form_options[thank_you_message]" id="thank_you_message-text-input" value="<?php echo esc_attr( $options['thank_you_message'] ); ?>" />
+<?php	
+}
+function my_form_options_render_page() {
+	?>
+		<div id="theme-options-wrap" class="widefat">    
+    <div id="icon-themes" class="icon32"><br /></div> 
+		<?php screen_icon(); ?>
+		<?php $theme_name = function_exists( 'wp_get_theme' ) ? wp_get_theme() : get_current_theme(); ?>
+		<h2><?php printf( __( '%s Form & PayPal Configuration', 'language' ), $theme_name ); ?></h2>
+		<?php settings_errors(); ?> 
+		<form method="post" action="options.php">			
+			<div class="tabber_container">
+			<div class="block">			
+				<?php settings_fields( 'form_options' );
+				do_settings_sections( 'form_options' ); ?>		</div>
+			</div>			
+				<?php submit_button();
+			?>
+		</form>
+	</div>
+	<?php
+}
+function my_form_options_validate( $input ) {
+	$output = array();
+		if ( isset( $input['paypal_intro'] ) && ! empty( $input['paypal_intro'] ) )
+		$output['paypal_intro'] = wp_filter_nohtml_kses( $input['paypal_intro'] );
+		if ( isset( $input['paypal_email'] ) && ! empty( $input['paypal_email'] ) )
+		$output['paypal_email'] = wp_filter_nohtml_kses( $input['paypal_email'] );	
+		if ( isset( $input['paypal_fee'] ) && ! empty( $input['paypal_fee'] ) )
+		$output['paypal_fee'] = wp_filter_nohtml_kses( $input['paypal_fee'] );		
+		if ( isset( $input['redirection_page'] ) && ! empty( $input['redirection_page'] ) )
+		$output['redirection_page'] = wp_filter_nohtml_kses( $input['redirection_page'] );		
+		if ( isset( $input['wait_text'] ) && ! empty( $input['wait_text'] ) )
+		$output['wait_text'] = wp_filter_nohtml_kses( $input['wait_text'] );		
+		if ( isset( $input['success_text'] ) && ! empty( $input['success_text'] ) )
+		$output['success_text'] = wp_filter_nohtml_kses( $input['success_text'] );
+		if ( isset( $input['user_exists'] ) && ! empty( $input['user_exists'] ) )
+		$output['user_exists'] = wp_filter_nohtml_kses( $input['user_exists'] );			
+	return apply_filters( 'my_form_options_validate', $output, $input );
+}
 $CarsGallery = get_option('CarsGallery_mode');
 if($CarsGallery != 'New'){
 $args = array('post_type'=> array('gtcd','user_listing') ,'posts_per_page'=>-1 );
@@ -48,15 +881,47 @@ function implement_ajax_name()
 					$option .= ' (' . $cat->category_count . ')';
 					$option .= '</option>';
 				}
-				echo '<option value="" selected="selected" data-value="-1">Select Model</option>' . $option;
+				echo '<option value="" selected="selected" data-value="-1">'. __('Select Model','language').'</option>' . $option;
 				die();
 			} // end if
 
 		}
+		add_action('wp_ajax_name_call' , 'implement_ajax_name');
+		add_action('wp_ajax_nopriv_name_call' , 'implement_ajax_name'); //for users that are not logged in.
 
-		add_action('wp_ajax_my_special_ajax_name_call' , 'implement_ajax_name');
-		add_action('wp_ajax_nopriv_my_special_ajax_name_call' , 'implement_ajax_name'); //for users that are not logged in.
+function implement_ajax_form()
+		{
+			if ( isset($_POST[ 'main_catid' ]) ) {
+				$categories = get_categories('child_of=' . $_POST[ 'main_catid' ] . '&hide_empty=0&taxonomy=makemodel');
+				foreach ( $categories as $cat ) {
+					$option .= '<option value="' . $cat->name . '" data-value="' . $cat->term_id . '">';
+					$option .= $cat->cat_name;
+					$option .= ' (' . $cat->category_count . ')';
+					$option .= '</option>';
+				}
+				echo '<option value="" selected="selected" data-value="-1">'. __('Select Model','language').'</option>' . $option;
+				die();
+			} // end if
 
+		}
+		add_action('wp_ajax_call_form' , 'implement_ajax_form');
+		add_action('wp_ajax_nopriv_call_form' , 'implement_ajax_form'); //for users that are not logged in.
+function implement_ajax_location()
+		{
+			if ( isset($_POST[ 'main_catid' ]) ) {
+				$categories = get_categories('child_of=' . $_POST[ 'main_catid' ] . '&hide_empty=0&taxonomy=location');
+				foreach ( $categories as $cat ) {
+					$option .= '<option value="' . $cat->name . '" data-value="' . $cat->term_id . '">';
+					$option .= $cat->cat_name;
+					$option .= '</option>';
+				}
+				echo '<option value="" selected="selected" data-value="-1">'. __('Select City','language').'</option>' . $option;
+				die();
+			} // end if
+
+		}
+		add_action('wp_ajax_call_location' , 'implement_ajax_location');
+		add_action('wp_ajax_nopriv_call_location' , 'implement_ajax_location'); //for users that are not logged in.
 
 function wp_dropdown_categories_custom($args = '')
 		{
@@ -417,19 +1282,6 @@ function top_deals_img($post_id,$size) {
 	}
 }
 	function gallery_img ($size) {		
-	?>
-	
-		<li><?php $video_source = get_post_meta($post->ID, 'video_meta_box_source', true);
-				$video_id = get_post_meta($post->ID, 'video_meta_box_videoid', true);	
-								
-				if(($video_source == "vimeo") && !empty($video_id)){ ?>
-				<iframe src="http://player.vimeo.com/video/<?php echo $video_id; ?>?title=0&amp;portrait=0&amp;color=e275c7" width="739" height="406" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-				<?php } elseif(( $video_source == "youtube") && !empty($video_id)){ ?>
-				<iframe src="http://www.youtube.com/embed/<?php echo $video_id; ?>"  width="739" height="406" frameborder="0" allowfullscreen></iframe>
-				<?php  } ?>
-		</li>
-
-	<?php 
 	global $post;
 	$tmp_post = $post;			
 	$args = array(
@@ -1007,3 +1859,4 @@ function force_flush_term_cache( $taxonomy = 'category' ) {
 	_get_term_hierarchy( $taxonomy );
 	return TRUE;
 }
+require_once 'sell-your-car/init.php';

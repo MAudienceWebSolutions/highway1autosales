@@ -54,7 +54,7 @@ function admin_register_head() {
 	'width'         => 328,
 	'flex-width'    => true,
 	'height'        => 80,
-	'default-image' => get_template_directory_uri() . '/images/logo.png',
+	'default-image' => get_template_directory_uri() . '/images/logo.jpg',
 );
 add_theme_support( 'custom-header', $args_header );
 
@@ -133,9 +133,7 @@ function my_request_filter( $query_vars ) {
 	    }
 	    return $query_vars;
 	}
-function gallery($post_id,$size) { 
-
-
+function gallery($post_id,$size) {
 	$saved = get_post_custom_values('CarsGallery', $post_id);
 	$saved = explode(',',$saved[0]);
 	if ( count($saved)>0){
@@ -148,19 +146,6 @@ function gallery($post_id,$size) {
 	} else {
 		echo "";
 	}
-	
-	$video_source = get_post_meta($post_id, 'video_meta_box_source', true);
-	$video_id = get_post_meta($post_id, 'video_meta_box_videoid', true);	
-	if ($video_source && $video_id) {
-		if(($video_source == "vimeo") && !empty($video_id)){ ?>
-			<iframe id="gallery-video" class="gallery-video" src="http://player.vimeo.com/video/<?php echo $video_id; ?>?title=0&amp;portrait=0&amp;color=e275c7" width="739" height="330" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-			<?php 
-		} elseif(( $video_source == "youtube") && !empty($video_id)){ 
-			?>
-			<iframe id="gallery-video" class="gallery-video" src="http://www.youtube.com/embed/<?php echo $video_id ?>?showinfo=0"  width="739" height="330" frameborder="0" allowfullscreen></iframe>
-			<?php  	
-		}
-	} 
 }
 
 function gallery_thumbs($post_id,$size) {
@@ -176,46 +161,6 @@ function gallery_thumbs($post_id,$size) {
 	} else {
 		echo "";
 	}
-
-	?>
-
-
-	<!-- Get Video thumbnail  -->
-	<?php
-		$video_source = get_post_meta($post_id, 'video_meta_box_source', true);
-		$video_id = get_post_meta($post_id, 'video_meta_box_videoid', true);	
-		if ($video_source && $video_id) {
-
-			if(($video_source == "vimeo") && !empty($video_id)){
-				$video_link = "http://player.vimeo.com/video/$video_id";
-			} elseif (( $video_source == "youtube") && !empty($video_id)) {
-				$video_link = "http://www.youtube.com/embed/$video_id";
-			}
-			$video = Carbon_Video::create($video_link);
-
-			?>
-
-			<li id="video-thumb">
-				<a href="#gallery-video" class='video-holder'>
-					<?php 
-						if ($video_source === "vimeo") {
-							$video_image_link = $video->get_thumbnail();
-						} else {
-							$video_image_link = 'http:' . $video->get_thumbnail();
-						}
-
-						$image =  wpthumb( $video_image_link, 'width=72&height=64&crop=1' );
-					?>
-					<span class="play-btn"></span>
-					<img src="<?php echo $image ?>" alt="" />
-				</a>
-			</li>
-
-			
-			<?php
-
-		} 
-
 }
 function gallery_user($post_id,$size) {
 	if ( $images = get_children(array(
