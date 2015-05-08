@@ -13,6 +13,9 @@ define( 'MAUDIENCE_CLIENT_SLUG', 'highway1autosales' );
     function maudience_scripts() {
         //enqueue parent styles
         wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
+        wp_enqueue_style( 'parent-mobile-style', get_template_directory_uri() . '/mobile.css' );
+        wp_enqueue_style( 'parent-mobile-style', get_template_directory_uri() . '/responsive/stylesheets/mobile.css' );
+        wp_enqueue_style( 'parent-jquery-selectbox', 'http://gorillathemes.com/demo/dealership/wp-content/themes/dealership-deluxe/js/jquery.selectBox.css' );
 
         //
         //wp_enqueue_style( MAUDIENCE_CLIENT_SLUG.'-css', get_stylesheet_directory_uri()."/lib/css/style.css" );
