@@ -1,5 +1,3 @@
-# Use PHP54.4 as default
-AddHandler application/x-httpd-php54 .php
 
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
