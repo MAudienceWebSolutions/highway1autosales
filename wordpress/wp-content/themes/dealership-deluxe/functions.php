@@ -88,7 +88,8 @@ add_settings_field( 'interior_text', __( 'Interior:', 'language' ), 'my_settings
 add_settings_field( 'exterior_text', __( 'Exterior:', 'language' ), 'my_settings_field_exterior_text_input', 	'theme_options', 'general' );
 add_settings_field( 'description_text', __( 'Description:', 'language' ), 'my_settings_field_description_text_input', 	'theme_options', 'general' );
 add_settings_field( 'torque_text', __( 'Torque:', 'language' ), 'my_settings_field_torque_text_input', 	'theme_options', 'general' );
-add_settings_field( 'price_text', __( 'Price:', 'language' ), 'my_settings_field_price_text_input', 'theme_options', 	'general' );	
+add_settings_field( 'price_text', __( 'Price:', 'language' ), 'my_settings_field_price_text_input', 'theme_options', 	'general' );
+add_settings_field( 'blackbookprice_text', __( 'Black Book Price:', 'language' ), 'my_settings_field_blackbookprice_text_input', 'theme_options', 	'general' );	
 add_settings_field( 'vehicle_type_text', __('Vehicle Type:','language' ),'my_settings_field_vehicle_type_text_input', 'theme_options', 'general' );					
 add_settings_field( 'miles_text', __( 'Miles:', 'language' ), 'my_settings_field_miles_text_input', 'theme_options', 	'general' );	
 add_settings_field( 'year_text', __( 'Year:', 'language' ), 'my_settings_field_year_text_input', 'theme_options', 	'general' );
@@ -137,6 +138,7 @@ function my_get_theme_options() {
 	$saved = (array) get_option( 'my_theme_options' );
 	$defaults = array(
 		'price_hide'       => 'off',
+		'blackbookprice_hide'       => 'on',
 		'condition_hide'       => 'off',
 		'location_hide'       => 'off', 
 		'vehicle_type_hide'       => 'off', 
@@ -146,6 +148,7 @@ function my_get_theme_options() {
 		'state_text'	=> __('State','language'), 
 		'location_text'	=> __('Location','language'),
 		'price_text'     => __('Price','language'),
+		'blackbookprice_text'     => __('Black Book Price','language'),
 		'status_tag_text'     => __('Condition','language'),
 		'top_deal_text'     => __('Top Deal','language'),
 		'featured_text'     => __('Featured','language'),
@@ -254,6 +257,11 @@ function my_settings_field_price_hide() {
 	?>
 	<?php
 }
+function my_settings_field_blackbookprice_hide() {
+	$options = my_get_theme_options();
+	?>
+	<?php
+}
 function my_settings_field_year_hide() {
 	$options = my_get_theme_options();
 	?>
@@ -284,6 +292,16 @@ function my_settings_field_price_text_input() {
 	?>
 	<input type="text" name="my_theme_options[price_text]" id="price-text-input" value="<?php echo esc_attr( $options['price_text'] ); ?>" />	<label for="checkbox">
 		<input type="checkbox" name="my_theme_options[price_hide]" id="checkbox" <?php checked( 'on', $options['price_hide'] ); ?> />
+		<?php _e( ' Hide in Search Module.', 'language' ); ?>
+	</label>
+
+	<?php	
+}
+function my_settings_field_blackbookprice_text_input() {
+	$options = my_get_theme_options();
+	?>
+	<input type="text" name="my_theme_options[blackbookprice_text]" id="blackbookprice-text-input" value="<?php echo esc_attr( $options['blackbookprice_text'] ); ?>" />	<label for="checkbox">
+		<input type="checkbox" name="my_theme_options[blackbookprice_hide]" id="checkbox" <?php checked( 'on', $options['blackbookprice_hide'] ); ?> />
 		<?php _e( ' Hide in Search Module.', 'language' ); ?>
 	</label>
 
@@ -583,7 +601,9 @@ function my_theme_options_validate( $input ) {
 	$output = array();
 
 		if ( isset( $input['price_hide'] ) )
-		$output['price_hide'] = 'on';	
+		$output['price_hide'] = 'on';
+		if ( isset( $input['blackbookprice_hide'] ) )
+		$output['blackbookprice_hide'] = 'on';	
 		if ( isset( $input['year_hide'] ) )
 		$output['year_hide'] = 'on';
 		if ( isset( $input['vehicle_type_hide'] ) )
@@ -603,7 +623,9 @@ function my_theme_options_validate( $input ) {
 		if ( isset( $input['state_text'] ) && ! empty( $input['state_text'] ) )
 		$output['state_text'] = wp_filter_nohtml_kses( $input['state_text'] );	
 		if ( isset( $input['price_text'] ) && ! empty( $input['price_text'] ) )
-		$output['price_text'] = wp_filter_nohtml_kses( $input['price_text'] );	
+		$output['price_text'] = wp_filter_nohtml_kses( $input['price_text'] );
+		if ( isset( $input['blackbookprice_text'] ) && ! empty( $input['blackbookprice_text'] ) )
+		$output['blackbookprice_text'] = wp_filter_nohtml_kses( $input['blackbookprice_text'] );	
 		if ( isset( $input['top_deal_text'] ) && ! empty( $input['top_deal_text'] ) )
 		$output['top_deal_text'] = wp_filter_nohtml_kses( $input['top_deal_text'] );	
 		if ( isset( $input['epa_mileage_text'] ) && ! empty( $input['epa_mileage_text'] ) )
