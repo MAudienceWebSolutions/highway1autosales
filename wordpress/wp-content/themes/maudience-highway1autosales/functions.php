@@ -175,15 +175,15 @@ define( 'MAUDIENCE_CLIENT_SLUG', 'highway1autosales' );
             body { font-family: Futura, "Trebuchet MS", Arial, sans-serif; }
             h1 a 
             { 
-                background-image:url('.get_stylesheet_directory_uri().'/img/european-motors-menu-logo.png) !important; 
+                background-image:url('.get_header_image().') !important; 
                 background-size: 211px auto !important;
                 height: 200px !important;
                 width: 311px !important; 
                 margin-bottom: 0 !important; 
                 padding-bottom: 0 !important; 
             }
-            .login form { margin-top: 10px !important; border: 1px solid #f9be19; }
-            .login {background:#043789;}
+            .login form { margin-top: 10px !important; border: 1px solid #C14040; }
+            .login {background:#777777;}
             </style>';
         }
         add_action('login_head', 'ma_custom_login_logo');
