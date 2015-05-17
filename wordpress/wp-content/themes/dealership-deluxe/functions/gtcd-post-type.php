@@ -102,13 +102,13 @@ function gtcd_custom_columns($column)
 					echo $fields['price'].'</div>'; 
 				}	
 
-				// if (is_numeric( $fields['bbprice']) && isset( $fields['bbprice']) )
-				// {  
+				if (is_numeric( $fields['blackbookprice']) && isset( $fields['blackbookprice']) )
+				{  
 				 
-				// echo '<div style="font-weight:bold;font-size:16px;color:#c41111!important;margin:5px 0!important;">'.$options['bbprice_text'].': '.$symbols['currency']; echo number_format($fields['bbprice']).'</div>'; 
-				// } else {  
-				// 	echo $fields['bbprice'].'</div>'; 
-				// }	
+				echo '<div style="font-weight:bold;font-size:16px;color:#c41111!important;margin:5px 0!important;">Black Book Price: '.$symbols['currency']; echo number_format($fields['blackbookprice']).'</div>'; 
+				} else {  
+					echo $fields['blackbookprice'].'</div>'; 
+				}	
 					
 				if(empty($fields['milestext']))
 				{
