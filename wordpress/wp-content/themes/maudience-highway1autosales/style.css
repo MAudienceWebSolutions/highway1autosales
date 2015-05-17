@@ -12,7 +12,10 @@
  Text Domain:  maudience-custom-theme
 */
 
-.main-nav li { max-width: 126px; }
+.header .main-nav li {
+	max-width: 126px;
+	font-size: 0.9rem;
+}
 
 .strike { text-decoration: line-through; }
 
