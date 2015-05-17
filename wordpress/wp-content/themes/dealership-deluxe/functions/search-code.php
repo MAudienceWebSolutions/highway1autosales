@@ -241,6 +241,8 @@ function cps_ajax_search($meta_boxes){
 <div class="result-detail-wrapper">  <!-- result detail wrapper -->
 <p class="vehicle-name"><span class="mini-hide"><?php if ( $fields['year']){ echo $fields['year'];}else {  echo ''; }?></span> <?php echo $post->post_title ?></p>
 <p class="vehicle-price show-for-small"><?php if ( $fields['year']){ echo $fields['year'];}else {  echo ''; }?> | <span class="price"><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']).'</span>'; } else  { echo '<span class="price">'.$fields['price'].'</span>' ; } ?>&nbsp;|&nbsp;
+
+
 <?php if ( is_numeric($fields['miles'])){echo number_format($fields['miles'],0,'.',',').' '.$options['miles_text']; }else  {echo $fields['miles']; };?></strong></p>
 
 <?php  echo '<p class="strong">';?>
@@ -276,9 +278,9 @@ echo implode(', ', $output).'</p>'; }
               <?php if (isset( $fields['exterior'])){ echo '<span class="mini-hide">'.$options['interior_text'].': '.$fields['interior'].'</span>';}else {  echo ''; };?>
               <?php if (isset( $fields['epamileage'])){ echo '<span class="mini-hide">'.$fields['epamileage'].'</span>';}else {  echo ''; };?>
                             </p>							
-	                        <p class="result-price show-for-medium-up hide-for-small"><?php
-						if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']); } else  { echo $fields['price']; } 
-							?>
+	                        <p class="result-price show-for-medium-up hide-for-small">
+	                        	<div class="blackbookprice-style strike"><?php if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency'].number_format($fields['blackbookprice']); } else  { echo $fields['blackbookprice']; } ?></div>
+								<div class="price-style"><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']); } else  { echo $fields['price']; } ?></div>
 							</p>
 							 <div style="clear:both;"></div>
                         </div> <!--   result detail wrapper ends -->
