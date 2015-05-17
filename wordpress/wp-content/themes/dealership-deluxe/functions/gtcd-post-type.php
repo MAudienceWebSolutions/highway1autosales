@@ -97,7 +97,18 @@ function gtcd_custom_columns($column)
 				if (is_numeric( $fields['price']) && isset( $fields['price']) )
 				{  
 				 
-				echo '<div style="font-weight:bold;font-size:16px;color:#c41111!important;margin:5px 0!important;">'.$options['price_text'].': '.$symbols['currency']; echo number_format($fields['price']).'</div>'; } else {  echo $fields['price'].'</div>'; }		
+				echo '<div style="font-weight:bold;font-size:16px;color:#c41111!important;margin:5px 0!important;">'.$options['price_text'].': '.$symbols['currency']; echo number_format($fields['price']).'</div>'; 
+				} else {  
+					echo $fields['price'].'</div>'; 
+				}	
+
+				// if (is_numeric( $fields['bbprice']) && isset( $fields['bbprice']) )
+				// {  
+				 
+				// echo '<div style="font-weight:bold;font-size:16px;color:#c41111!important;margin:5px 0!important;">'.$options['bbprice_text'].': '.$symbols['currency']; echo number_format($fields['bbprice']).'</div>'; 
+				// } else {  
+				// 	echo $fields['bbprice'].'</div>'; 
+				// }	
 					
 				if(empty($fields['milestext']))
 				{

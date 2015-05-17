@@ -11,3 +11,5 @@
  Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
  Text Domain:  maudience-custom-theme
 */
+
+.main-nav li { max-width: 126px; }
