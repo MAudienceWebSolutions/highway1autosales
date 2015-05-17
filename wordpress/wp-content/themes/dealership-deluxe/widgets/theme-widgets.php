@@ -63,7 +63,8 @@ class Top_Deals extends WP_Widget{
         <div class="arrivals-details">   
         	<p class="vehicle-name"><?php the_title(); ?></p>
 				<p class="vehicle-info">
-				<span class="blackbookprice"><?php if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency'].number_format($fields['blackbookprice']).'</span>'; } else  { echo '<span class="blackbookprice">'.$fields['blackbookprice'].'</span>' ; } ?><br/>
+				<span class="blackbookprice strike">
+					<?php if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency'].number_format($fields['blackbookprice']).'</span>'; } else  { echo $fields['blackbookprice'].'</span>' ; } ?>
 				<span class="price"><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']).'</span>'; } else  { echo '<span class="price">'.$fields['price'].'</span>' ; } ?><br/>
 <div class="meta-style"><?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> <?php	 if ( $fields['miles']){ echo $fields['miles'].' '.$options['miles_text'];} elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['miles_text'];} else {echo '';}  ?></div></span></p>   
 
