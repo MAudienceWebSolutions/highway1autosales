@@ -18,7 +18,7 @@
              
                <div class="clear"></div>
 	                <h3 class="show-for-small"><?php if (is_numeric( $fields['price'])){ echo $options['price_text'].': '.$symbols['currency']; echo number_format($fields['price']);}else {  echo $fields['price']; } ?></h3>
-                 <div class="clear"></div>	                    			
+                <div class="clear"></div>	                    			
 			<div id="gallery_holder" class="big-view hideOnSearch">	
 			<div class="cpsAjaxLoaderSlider"></div> 
 				<div id="gallery" class="big-view hideOnSearch">					
@@ -90,8 +90,9 @@ echo implode(', ', $output); }
 	</span>					         										
 	<div class="item-list">	<div class="cpsAjaxLoaderResults"></div> 
 		<ul class="overview active first  quick-list-feat quick-glance">						
-							<?php	if ( $fields['price']){ echo '<li><p class="strong">'.$options['price_text'].':</p> '.$symbols['currency']; echo number_format($fields['price']).'</li>';}else {  echo ''; } ?> 						<?php	if ( $fields['miles']){ echo '<li><p class="strong">'.$options['miles_text'].':</p> '.$fields['miles'].'</li>';}else {  echo ''; }?>
-            			<?php	if ( $fields['vehicletype']){ echo '<li><p class="strong">'.$options['vehicle_type_text'].':</p> '.$fields['vehicletype'].'</li>';}else {  echo ''; }?>
+							<?php	if ( $fields['blackbookprice']){ echo '<li><p class="strong">'.$options['blackbookprice_text'].':</p> <div class="strike">'.$symbols['currency']; echo number_format($fields['blackbookprice']).'</div></li>';}else {  echo ''; } ?>
+                  <?php  if ( $fields['price']){ echo '<li><p class="strong">'.$options['price_text'].':</p> '.$symbols['currency']; echo number_format($fields['price']).'</li>';}else {  echo ''; } ?>
+                  <?php	if ( $fields['vehicletype']){ echo '<li><p class="strong">'.$options['vehicle_type_text'].':</p> '.$fields['vehicletype'].'</li>';}else {  echo ''; }?>
             			<?php	if ( $fields['drive']){ echo '<li><p class="strong">'.$options['drive_text'].':</p> '.$fields['drive'].'</li>';}else {  echo ''; }?>
             			<?php	if ( $fields['transmission']){ echo '<li><p class="strong">'.$options['transmission_text'].':</p> '.$fields['transmission'].'</li>';}else {  echo ''; }?>
             			<?php	if ( $fields['exterior']){ echo '<li><p class="strong">'.$options['exterior_text'].':</p> '.$fields['exterior'].'</li>';}else {  echo ''; }?>
