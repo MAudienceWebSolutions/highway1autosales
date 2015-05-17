@@ -63,6 +63,7 @@ class Top_Deals extends WP_Widget{
         <div class="arrivals-details">   
         	<p class="vehicle-name"><?php the_title(); ?></p>
 				<p class="vehicle-info">
+				<span class="blackbookprice"><?php if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency'].number_format($fields['blackbookprice']).'</span>'; } else  { echo '<span class="blackbookprice">'.$fields['blackbookprice'].'</span>' ; } ?><br/>
 				<span class="price"><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']).'</span>'; } else  { echo '<span class="price">'.$fields['price'].'</span>' ; } ?><br/>
 <div class="meta-style"><?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> <?php	 if ( $fields['miles']){ echo $fields['miles'].' '.$options['miles_text'];} elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['miles_text'];} else {echo '';}  ?></div></span></p>   
 
@@ -468,7 +469,11 @@ class Featured_Widget extends WP_Widget {
 				</div>
 				 <div>
 					<strong><?php the_title();?></strong>
-					<div class="meta-style"><?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> <?php	 if ( $fields['miles']){ echo $fields['miles'].' '.$options['milestext'];} elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['milestext'];} else {echo '';}  ?></div>
+					<div class="meta-style">
+						<?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> 
+						<?php if ( $fields['miles']){ echo $fields['miles'].' '.$options['miles_text']; } elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['miles_text'];} else { echo ''; }  ?>
+					</div>
+					<div class="blackbookprice-style strike"><?php  if ( $fields['blackbookprice']){ echo $symbols['currency']; echo number_format($fields['blackbookprice']);}else {  echo ''; } ?></div>
 					<div class="price-style"><?php  if ( $fields['price']){ echo $symbols['currency']; echo number_format($fields['price']);}else {  echo ''; } ?></div>
 						<p><a class="detail-btn" href="<?php the_permalink();?>"><?php _e('View','language');?></a></p>
                      </div>   
