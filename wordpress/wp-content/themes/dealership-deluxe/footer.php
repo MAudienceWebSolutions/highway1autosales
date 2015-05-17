@@ -6,18 +6,19 @@
 	</div><!--end of footer-wrapper div-->	
 	<div class="bottom-bar-wrapper hide-for-small">
 	<div class="bottom-bar">
-		<p><?php _e('Dealership by ','language');?>
-			<a href="http://gorillathemes.com"><?php echo('Gorilla Themes');?></a> - <?php _e('Powered by ','language');?>
-			<a href="http://wordpress.org"><?php _e('WordPress','language');?></a>
+		<p><?php _e('Website ','language');?>
+            <?php _e('Powered by ','language');?>
+			<a href="http://maudience.com"><?php echo('Maudience');?></a>
 		</p>
 	</div>
 </div>
 <footer id="footerMob" class="row show-for-small">
             <div style="width:100%; height:48px;">
             <div class="twelve columns">            
-                <div class="footer_links"><?php _e('Dealership by','language');?>
-					<a href="http://gorillathemes.com" class="footer-gorilla-link"></a> - <?php _e('Powered by','language');?>
-					<a href="http://wordpress.org" class="footer-wp-link"></a>
+                <div class="footer_links">
+                    <?php _e('Website ','language');?>
+                    <?php _e('Powered by','language');?>
+					<a href="http://maudience.com" class="footer-maudience-link"><?php echo('Maudience');?></a>
 				</div>              
             </div>                      
             </div>
