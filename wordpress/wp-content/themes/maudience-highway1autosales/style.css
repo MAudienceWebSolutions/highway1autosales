@@ -13,3 +13,18 @@
 */
 
 .main-nav li { max-width: 126px; }
+
+.strike { text-decoration: line-through; }
+
+.price-style,
+.blackbookprice-style { display: inline-block; }
+
+.blackbookprice-style {
+	color: black;
+	font-weight: bold;
+	font: 14px 'Lato', sans-serif;
+	padding: 4px 0 4px 6px;
+	position: relative;
+	z-index: 8888;
+	margin-right: 0;
+}
