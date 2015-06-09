@@ -78,7 +78,7 @@ function calculatePayment(form)
     princ = form.price.value - form.dp.value;
     intRate = (form.ir.value/100) / 12;
     months = form.term.value * 12;
-    form.pmt.value = Math.floor((princ*intRate)/(1-Math.pow(1+intRate,(-1*months)))*100)/100;
+    form.pmt.value = (Math.floor((princ*intRate)/(1-Math.pow(1+intRate,(-1*months)))*100)/100) + ((Math.floor((princ*intRate)/(1-Math.pow(1+intRate,(-1*months)))*100)/100)*0.05);
     form.principle.value = princ;
     form.payments.value = months;
 }
@@ -111,7 +111,13 @@ function calculatePayment(form)
 	<div class="title_field">		
 			<label class="field_label"><?php _e('Interest Rate: ','language')?></label>
 				<div>
-	<input type="text" size="5" name="ir" value="0" onBlur="checkForZero(this)" onChange="checkForZero(this)"> % 
+	<input type="text" size="5" name="ir" value="8" onBlur="checkForZero(this)" onChange="checkForZero(this)"> % 
+			</div>
+	</div>
+	<div class="title_field">		
+			<label class="field_label"><?php _e('Iowa Tax Rate: ','language')?></label>
+				<div>
+	<input type="text" size="5" name="itr" value="5" readonly> % 
 			</div>
 	</div>
 		<div class="title_field">		
