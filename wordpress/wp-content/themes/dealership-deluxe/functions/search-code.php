@@ -279,9 +279,20 @@ echo implode(', ', $output).'</p>'; }
               <?php if (isset( $fields['epamileage'])){ echo '<span class="mini-hide">'.$fields['epamileage'].'</span>';}else {  echo ''; };?>
                             </p>							
 	                        <p class="result-price show-for-medium-up hide-for-small">
-	                        	<div class="blackbookprice-style strike"><?php if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency'].number_format($fields['blackbookprice']); } else  { echo $fields['blackbookprice']; } ?></div>
-								<div class="price-style"><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']); } else  { echo $fields['price']; } ?></div>
-							</p>
+	                        	<div class="">
+
+	                        		<?php if (is_numeric( $fields['blackbookprice'])){?><span class='bbprice-label'>BB Price: </span><?php } ?>
+	                        		<span class="strike">
+	                        			<?php if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency'].number_format($fields['blackbookprice']); } else  { echo $fields['blackbookprice']; } ?>
+	                        		</span>
+	                        		<?php if (is_numeric( $fields['blackbookprice'])){?><br /><?php } ?>
+	                        		<?php if (is_numeric( $fields['price'])){?><span class='price-label'>Our Price: </span><?php } ?>
+									<div class="price-style"><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']); } else  { echo $fields['price']; } ?></div>
+							
+
+	                        	</div>
+									<?php if (is_numeric( $fields['blackbookprice'])){?><br/><?php } ?>
+								</p>
 							 <div style="clear:both;"></div>
                         </div> <!--   result detail wrapper ends -->
           <div style="clear:both;"></div>               

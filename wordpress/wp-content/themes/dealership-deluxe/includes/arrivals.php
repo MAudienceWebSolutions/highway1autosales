@@ -33,9 +33,18 @@
 					</div></a>
                     <div class="arrivals-details">
 					<p><strong><?php the_title();?></strong></p>
-						<div class="blackbookprice-style strike"><?php  if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency']; echo number_format($fields['blackbookprice']);} else {  echo $fields['blackbookprice']; } ?></div>
-						<div class="price-style"><?php  if (is_numeric( $fields['price'])){ echo $symbols['currency']; echo number_format($fields['price']);} else {  echo $fields['price']; } ?></div>
-						<div class="meta-style"><?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> <?php	 if ( $fields['miles']){ echo $fields['miles'].' '.$options['miles_text'];} elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['miles_text'];} else {echo '';}  ?></div>
+					<p style="padding-left: 6px;">
+						<?php if (is_numeric( $fields['blackbookprice'])){?><span class='bbprice-label'>BB Price: </span><?php } ?>
+                		<span class="strike">
+                			<?php if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency'].number_format($fields['blackbookprice']); } else  { echo $fields['blackbookprice']; } ?>
+                		</span>
+                		<?php if (is_numeric( $fields['blackbookprice'])){?><br /><?php } ?>
+
+						<?php if (is_numeric( $fields['price'])){?><span class='price-label'>Our Price: </span><?php } ?>
+						<span class='price-style'><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']); } else  { echo $fields['price']; } ?></span>
+						
+					</p>
+							<div class="meta-style"><?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> <?php	 if ( $fields['miles']){ echo $fields['miles'].' '.$options['miles_text'];} elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['miles_text'];} else {echo '';}  ?></div>
 				
 					<?php $terms = get_the_terms( $post->ID , 'location' );
 
