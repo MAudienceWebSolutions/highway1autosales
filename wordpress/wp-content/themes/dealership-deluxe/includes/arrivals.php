@@ -43,6 +43,10 @@
 						<?php if (is_numeric( $fields['price'])){?><span class='price-label'>Our Price: </span><?php } ?>
 						<span class='price-style'><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']); } else  { echo $fields['price']; } ?></span>
 						
+						<?php if ( $fields2['enginetype']){ echo '<br/>'.$options['engine_type_text'].': <span style="text-transform:capitalize;">'.$fields2['enginetype'].'</span>';}else {  echo ''; }?>
+            			<?php if ( $fields['EPA_CITY_MPG']){ echo '<br/>City MPG: '.$fields['EPA_CITY_MPG'];}else {  echo ''; }?>
+            			<?php if ( $fields['EPA_HIGHWAY_MPG']){ echo '<br/>Highway MPG: '.$fields['EPA_HIGHWAY_MPG'];}else {  echo ''; }?>
+   						
 					</p>
 							<div class="meta-style"><?php if ( $fields['year']){ echo $fields['year'].' | ';} else {  echo ''; } ?> <?php	 if ( $fields['miles']){ echo $fields['miles'].' '.$options['miles_text'];} elseif ($fields['miles'] == '0' ){ echo _e('0','language').' '.$options['miles_text'];} else {echo '';}  ?></div>
 				
