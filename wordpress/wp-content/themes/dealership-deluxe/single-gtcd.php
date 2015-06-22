@@ -91,17 +91,21 @@ echo implode(', ', $output); }
 	<div class="item-list">	<div class="cpsAjaxLoaderResults"></div> 
 		<ul class="overview active first  quick-list-feat quick-glance">						
 							<?php	if ( $fields['blackbookprice']){ echo '<li><p class="strong">'.$options['blackbookprice_text'].':</p> <div class="strike">'.$symbols['currency']; echo number_format($fields['blackbookprice']).'</div></li>';}else {  echo ''; } ?>
-                  <?php  if ( $fields['price']){ echo '<li><p class="strong">'.$options['price_text'].':</p> '.$symbols['currency']; echo number_format($fields['price']).'</li>';}else {  echo ''; } ?>
-                  <?php	if ( $fields['vehicletype']){ echo '<li><p class="strong">'.$options['vehicle_type_text'].':</p> '.$fields['vehicletype'].'</li>';}else {  echo ''; }?>
-            			<?php	if ( $fields['drive']){ echo '<li><p class="strong">'.$options['drive_text'].':</p> '.$fields['drive'].'</li>';}else {  echo ''; }?>
-            			<?php	if ( $fields['transmission']){ echo '<li><p class="strong">'.$options['transmission_text'].':</p> '.$fields['transmission'].'</li>';}else {  echo ''; }?>
-            			<?php	if ( $fields['exterior']){ echo '<li><p class="strong">'.$options['exterior_text'].':</p> '.$fields['exterior'].'</li>';}else {  echo ''; }?>
+              <?php  if ( $fields['price']){ echo '<li><p class="strong">'.$options['price_text'].':</p> '.$symbols['currency']; echo number_format($fields['price']).'</li>';}else {  echo ''; } ?>
+              <?php	if ( $fields['vehicletype']){ echo '<li><p class="strong">'.$options['vehicle_type_text'].':</p> '.$fields['vehicletype'].'</li>';}else {  echo ''; }?>
+        			<?php	if ( $fields['drive']){ echo '<li><p class="strong">'.$options['drive_text'].':</p> '.$fields['drive'].'</li>';}else {  echo ''; }?>
+        			<?php	if ( $fields['transmission']){ echo '<li><p class="strong">'.$options['transmission_text'].':</p> '.$fields['transmission'].'</li>';}else {  echo ''; }?>
+        			<?php	if ( $fields['exterior']){ echo '<li><p class="strong">'.$options['exterior_text'].':</p> '.$fields['exterior'].'</li>';}else {  echo ''; }?>
    						<?php	if ( $fields['interior']){ echo '<li><p class="strong">'.$options['interior_text'].':</p> '.$fields['interior'].'</li>';}else {  echo ''; }?>
    						<?php	if ( $fields['epamileage']){ echo '<li><p class="strong">'.$options['epa_mileage_text'].':</p> '.$fields['epamileage'].'</li>';}else {  echo ''; }?>
    						<?php	if ( $fields['stock']){ echo '<li><p class="strong">'.$options['stock_text'].':</p> '.$fields['stock'].'</li>';}else {  echo ''; }?>
    						<?php	if ( $fields['vin']){ echo '<li><p class="strong">'.$options['vin_text'].':</p> '.$fields['vin'].'</li>';}else {  echo ''; }?>
+
+              <?php if ( $fields2['enginetype']){ echo  '<li><p class="strong">'.$options['engine_type_text'].': </p>'.$fields2['enginetype'].'</li>';}else {  echo ''; }?>
+              <?php if ( $fields['EPA_CITY_MPG']){ echo '<li><p class="strong">EPA City MPG: </p>'.$fields['EPA_CITY_MPG'].'</li>';}else {  echo ''; }?>
+              <?php if ( $fields['EPA_HIGHWAY_MPG']){ echo '<li><p class="strong">EPA Highway MPG: </p>'.$fields['EPA_HIGHWAY_MPG'].'</li>';}else {  echo ''; }?>
    						<div style="background:none; padding:10px 3px 0px 3px!important;margin:0px auto;"><?php   if ( $fields['carfax']){ ?>  
-   						<a class="carfax" target="_blank" href='http://www.carfax.com/VehicleHistory/p/Report.cfx?partner=<?php  echo $fields['carfax']; ?>&vin=<?php  echo $fields['vin']; ?>'><img style="border:1px solid #ccc" src='http://www.carfaxonline.com/media/img/subscriber/buyback.jpg' border='0'></a><?php  }else {   echo '';  }?>
+              <a class="carfax" target="_blank" href='http://www.carfax.com/VehicleHistory/p/Report.cfx?partner=<?php  echo $fields['carfax']; ?>&vin=<?php  echo $fields['vin']; ?>'><img style="border:1px solid #ccc" src='http://www.carfaxonline.com/media/img/subscriber/buyback.jpg' border='0'></a><?php  }else {   echo '';  }?>
    						</div><div style="clear:both"></div><div class="car-detail">  						
    						<h2 class="hideOnSearch"><?php if ( $fields['year']){ echo $fields['year'];}else {  echo ''; }?> <?php the_title();?></h2>						
                               	<?php 	
@@ -114,19 +118,14 @@ echo implode(', ', $output); }
 										?>	</div>
 						</ul>										
 					<ul class="features feature-list">	
-					
-					
-					
-                        		<?php if (get_the_terms($post->ID, 'features')) {
-  									$taxonomy = get_the_terms($post->ID, 'features');									
-  									foreach ($taxonomy as $taxonomy_term) {
-    								?> <li><a href="#search/<?php echo strtolower(str_replace(" ", "", features)); ?>-<?php echo str_replace(' ', '+', $taxonomy_term->name);?>/"><?php echo $taxonomy_term->name;?></a></li>
-    								
-    								
-    								
-    								<?php }  						
-																
-									}
+  					<?php if (get_the_terms($post->ID, 'features')) {
+  					$taxonomy = get_the_terms($post->ID, 'features');									
+  					foreach ($taxonomy as $taxonomy_term) {
+  					?> 
+            <li><a href="#search/<?php echo strtolower(str_replace(" ", "", features)); ?>-<?php echo str_replace(' ', '+', $taxonomy_term->name);?>/">
+              <?php echo $taxonomy_term->name;?></a></li>
+    				<?php }  	
+            }
 									
 										?>				
           <?php if ( $fields['drive']){ echo '<li>'.$options['drive_text'].': '.$fields['drive'].'</li>';}else {  echo ''; }?>
