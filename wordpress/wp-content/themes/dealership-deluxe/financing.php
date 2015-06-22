@@ -123,7 +123,7 @@ function calculatePayment(form)
 		<div class="title_field">		
 			<label class="field_label"><?php _e('Loan Term: ','language')?></label>
 				<div>	
-		<input type="text" size="4"  name="term" value="30"  onBlur="checkForZero(this)" onChange="checkForZero(this)"> Yrs.
+		<input type="text" size="4"  name="term" value="5"  onBlur="checkForZero(this)" onChange="checkForZero(this)"> Yrs.
 			</div>  
 	</div>
 </div> 
