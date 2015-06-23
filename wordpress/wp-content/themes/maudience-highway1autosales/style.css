@@ -60,3 +60,5 @@ body #container {
 	position: absolute;
 	bottom: 0;
 }
+
+.tri-col-span h1 { margin-top: 20px; }
