@@ -280,16 +280,26 @@ echo implode(', ', $output).'</p>'; }
                             </p>							
 	                        <p class="result-price show-for-medium-up hide-for-small">
 	                        	<div class="">
-
-	                        		<?php if (is_numeric( $fields['blackbookprice'])){?><span class='bbprice-label'>BB Price: </span><?php } ?>
-	                        		<span class="strike">
-	                        			<?php if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency'].number_format($fields['blackbookprice']); } else  { echo $fields['blackbookprice']; } ?>
-	                        		</span>
-	                        		<?php if (is_numeric( $fields['blackbookprice'])){?><br /><?php } ?>
-	                        		<?php if (is_numeric( $fields['price'])){?><span class='price-label'>Our Price: </span><?php } ?>
-									<div class="price-style"><?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']); } else  { echo $fields['price']; } ?></div>
-							
-
+	                        		<?php if (is_numeric( $fields['blackbookprice'])){?>
+	                        			<span style="font-weight: bold;" class='bbprice-label'>BB Price: </span>
+	                        		<?php } ?>
+	                        			<span class="strike">
+	                        				<?php if (is_numeric( $fields['blackbookprice'])){ echo $symbols['currency'].number_format($fields['blackbookprice']); } else  { echo $fields['blackbookprice']; } ?>
+	                        			</span>
+	                        		<?php if (is_numeric( $fields['blackbookprice'])){?>
+	                        			<br />
+	                        		<?php } ?>
+	                        		<?php if (is_numeric( $fields['price'])){?>
+	                        			<span style="font-weight: bold;" class='price-label'>Our Price: </span>
+	                        		<?php } ?>
+										<div class="price-style">
+											<?php if (is_numeric( $fields['price'])){ echo $symbols['currency'].number_format($fields['price']); } else  { echo $fields['price']; } ?>
+										</div>
+										<div>
+										<?php if ( $fields2['enginetype']){ echo  '<span class="strong">'.$options['engine_type_text'].': </span>'.$fields2['enginetype'].'';}else {  echo ''; }?>
+										<?php if ( $fields['EPA_CITY_MPG']){ echo '<span class="strong">City MPG: </span>'.$fields['EPA_CITY_MPG'].'';}else {  echo ''; }?>
+										<?php if ( $fields['EPA_HIGHWAY_MPG']){ echo '<span class="strong">Highway MPG: </span>'.$fields['EPA_HIGHWAY_MPG'].'';}else {  echo ''; }?>
+   										</div>
 	                        	</div>
 									<?php if (is_numeric( $fields['blackbookprice'])){?><br/><?php } ?>
 								</p>
